@@ -81,7 +81,7 @@ A single-page web application for podcast hosts to plan and organize their episo
 - **Technologies**: HTML5, CSS3, Vanilla JavaScript
 - **Dependencies**: html2canvas (CDN for image export)
 - **File Size**: ~65KB single file
-- **Version**: 1.65
+- **Version**: 1.66
 
 ### Data Structure
 ```javascript
@@ -191,6 +191,14 @@ episodeDetails = {
 - Safe for sensitive planning information
 
 ## Version History
+
+### Version 1.66 (December 2025)
+- Changed default tab to Planner (instead of Planner Details)
+- Export buttons now stack vertically for better organization
+- Fixed segment actions alignment (person and asset dropdowns properly aligned)
+- Added Collapse All / Expand All button for segments
+- Collapsed view shows only segment title, time, and remove button
+- Improved segment organization workflow on Planner page
 
 ### Version 1.65 (December 2025)
 - Added Assets feature with color coding
