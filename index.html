@@ -860,21 +860,6 @@
 
         <!-- Tab 3: Further Help -->
         <div class="tab-content">
-            <!-- AI Helpers Section -->
-            <div class="section">
-                <h2>AI Helpers</h2>
-                <p style="color: #6c757d; margin-bottom: 20px;">Use these AI tools to help with podcast planning, script writing, and content ideas:</p>
-                <button class="btn btn-primary" onclick="window.open('https://copilot.microsoft.com/', '_blank')">
-                    🤖 Microsoft Copilot
-                </button>
-                <button class="btn btn-primary" onclick="window.open('https://gemini.google.com/', '_blank')">
-                    🤖 Google Gemini
-                </button>
-                <button class="btn btn-primary" onclick="window.open('https://chat.openai.com/', '_blank')">
-                    🤖 ChatGPT
-                </button>
-            </div>
-
             <!-- Useful Prompts Section -->
             <div class="section">
                 <h2>Useful Prompts</h2>
@@ -892,6 +877,9 @@
                     </div>
                     <div class="prompt-actions">
                         <span class="copy-feedback" id="feedback1">✓ Copied!</span>
+                        <button class="btn btn-secondary btn-small" onclick="askCopilot()">Ask Copilot</button>
+                        <button class="btn btn-secondary btn-small" onclick="askChatGPT()">Ask ChatGPT</button>
+                        <button class="btn btn-secondary btn-small" onclick="askGemini()">Ask Gemini</button>
                         <button class="btn btn-primary btn-small" onclick="copyPrompt('prompt1', 'feedback1')">Copy Prompt</button>
                     </div>
                 </div>
@@ -908,6 +896,9 @@
                     </div>
                     <div class="prompt-actions">
                         <span class="copy-feedback" id="feedback2">✓ Copied!</span>
+                        <button class="btn btn-secondary btn-small" onclick="askCopilot()">Ask Copilot</button>
+                        <button class="btn btn-secondary btn-small" onclick="askChatGPT()">Ask ChatGPT</button>
+                        <button class="btn btn-secondary btn-small" onclick="askGemini()">Ask Gemini</button>
                         <button class="btn btn-primary btn-small" onclick="copyPrompt('prompt2', 'feedback2')">Copy Prompt</button>
                     </div>
                 </div>
@@ -924,6 +915,9 @@
                     </div>
                     <div class="prompt-actions">
                         <span class="copy-feedback" id="feedback3">✓ Copied!</span>
+                        <button class="btn btn-secondary btn-small" onclick="askCopilot()">Ask Copilot</button>
+                        <button class="btn btn-secondary btn-small" onclick="askChatGPT()">Ask ChatGPT</button>
+                        <button class="btn btn-secondary btn-small" onclick="askGemini()">Ask Gemini</button>
                         <button class="btn btn-primary btn-small" onclick="copyPrompt('prompt3', 'feedback3')">Copy Prompt</button>
                     </div>
                 </div>
@@ -940,6 +934,9 @@
                     </div>
                     <div class="prompt-actions">
                         <span class="copy-feedback" id="feedback4">✓ Copied!</span>
+                        <button class="btn btn-secondary btn-small" onclick="askCopilot()">Ask Copilot</button>
+                        <button class="btn btn-secondary btn-small" onclick="askChatGPT()">Ask ChatGPT</button>
+                        <button class="btn btn-secondary btn-small" onclick="askGemini()">Ask Gemini</button>
                         <button class="btn btn-primary btn-small" onclick="copyPrompt('prompt4', 'feedback4')">Copy Prompt</button>
                     </div>
                 </div>
@@ -956,6 +953,9 @@
                     </div>
                     <div class="prompt-actions">
                         <span class="copy-feedback" id="feedback5">✓ Copied!</span>
+                        <button class="btn btn-secondary btn-small" onclick="askCopilot()">Ask Copilot</button>
+                        <button class="btn btn-secondary btn-small" onclick="askChatGPT()">Ask ChatGPT</button>
+                        <button class="btn btn-secondary btn-small" onclick="askGemini()">Ask Gemini</button>
                         <button class="btn btn-primary btn-small" onclick="copyPrompt('prompt5', 'feedback5')">Copy Prompt</button>
                     </div>
                 </div>
@@ -1745,6 +1745,21 @@
                 console.error('Failed to copy text: ', err);
                 alert('Failed to copy prompt. Please try again.');
             });
+        }
+
+        // Ask Copilot functionality
+        function askCopilot() {
+            window.open('https://copilot.microsoft.com/', '_blank');
+        }
+
+        // Ask ChatGPT functionality
+        function askChatGPT() {
+            window.open('https://chatgpt.com/', '_blank');
+        }
+
+        // Ask Gemini functionality
+        function askGemini() {
+            window.open('https://gemini.google.com/', '_blank');
         }
     </script>
 </body>
