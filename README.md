@@ -167,4 +167,5 @@ episodeDetails = {
 
 **License**: Open Source  
 **Created**: 2025  
-**Maintained by**: TJ
+**Maintained by**: TJ  
+**Contact**: tj@channel84.co.uk

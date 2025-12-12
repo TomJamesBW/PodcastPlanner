@@ -18,6 +18,50 @@
             padding: 20px;
         }
 
+        .mobile-warning {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .mobile-warning.active {
+            display: flex;
+        }
+
+        .mobile-warning-content {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            text-align: center;
+            max-width: 400px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .mobile-warning-content h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .mobile-warning-content p {
+            color: #495057;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .mobile-warning-content .icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -699,9 +743,63 @@
         .error-message.show {
             display: block;
         }
+
+        .mobile-warning {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .mobile-warning.active {
+            display: flex;
+        }
+
+        .mobile-warning-content {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            text-align: center;
+            max-width: 400px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .mobile-warning-content h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .mobile-warning-content p {
+            color: #495057;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .mobile-warning-content .icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
+    <!-- Mobile Warning Overlay -->
+    <div class="mobile-warning" id="mobileWarning">
+        <div class="mobile-warning-content">
+            <div class="icon">📱</div>
+            <h2>Screen Too Small</h2>
+            <p><strong>This tool cannot be used on phone screens due to resolution and size limitations.</strong></p>
+            <p>Please use a desktop browser or tablet for the best experience.</p>
+        </div>
+    </div>
+
     <div class="container">
         <div class="header">
             <h1>🎙️ Podcast Planner Tool</h1>
@@ -971,7 +1069,7 @@
         </div>
     </div>
 
-    <div class="version">Version 1.0</div>
+    <div class="version">Version 1.1</div>
 
     <script>
         // Data storage
@@ -983,8 +1081,24 @@
             season: ''
         };
 
+        // Check screen size and show warning if too small
+        function checkScreenSize() {
+            const mobileWarning = document.getElementById('mobileWarning');
+            const container = document.querySelector('.container');
+            
+            // Show warning if width is less than 768px (tablet breakpoint)
+            if (window.innerWidth < 768) {
+                mobileWarning.classList.add('active');
+                container.style.display = 'none';
+            } else {
+                mobileWarning.classList.remove('active');
+                container.style.display = 'block';
+            }
+        }
+
         // Load data from cookies on page load
         window.onload = function() {
+            checkScreenSize();
             loadFromCookies();
             renderPeople();
             renderSegments();
@@ -993,6 +1107,9 @@
             updateCalculator();
             loadEpisodeDetails();
         };
+
+        // Re-check on window resize
+        window.addEventListener('resize', checkScreenSize);
 
         // Tab switching
         function switchTab(tabIndex) {
@@ -1895,6 +2012,27 @@
         function askGemini() {
             window.open('https://gemini.google.com/', '_blank');
         }
+
+        // Check screen size and show warning if too small
+        function checkScreenSize() {
+            const mobileWarning = document.getElementById('mobileWarning');
+            const container = document.querySelector('.container');
+            
+            // Show warning if width is less than 768px (tablet breakpoint)
+            if (window.innerWidth < 768) {
+                mobileWarning.classList.add('active');
+                container.style.display = 'none';
+            } else {
+                mobileWarning.classList.remove('active');
+                container.style.display = 'block';
+            }
+        }
+
+        // Check on load
+        checkScreenSize();
+
+        // Re-check on window resize
+        window.addEventListener('resize', checkScreenSize);
     </script>
 </body>
 </html>
