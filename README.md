@@ -66,7 +66,7 @@ A single-page web application for podcast hosts to plan and organize their episo
 - **Technologies**: HTML5, CSS3, Vanilla JavaScript
 - **Dependencies**: html2canvas (CDN for image export)
 - **File Size**: ~60KB single file
-- **Version**: 1.4
+- **Version**: 1.5
 
 ### Data Structure
 ```javascript
@@ -167,6 +167,14 @@ episodeDetails = {
 - Safe for sensitive planning information
 
 ## Version History
+
+### Version 1.5 (December 2025)
+- Added Recording Date field to episode details
+- Added Air Date field to episode details
+- Date pickers use HTML5 date input type
+- Dates display in formatted long format (e.g., "December 12, 2025")
+- Dates included in all export formats (TXT, PDF, JPG)
+- Dates persisted in localStorage
 
 ### Version 1.4 (December 2025)
 - Added Settings tab with customization options

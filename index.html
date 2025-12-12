@@ -914,6 +914,14 @@
                     <label for="episodeSeason">Episode Season</label>
                     <input type="text" id="episodeSeason" placeholder="Enter episode season" oninput="saveEpisodeDetails()">
                 </div>
+                <div class="form-group">
+                    <label for="recordingDate">Recording Date</label>
+                    <input type="date" id="recordingDate" oninput="saveEpisodeDetails()">
+                </div>
+                <div class="form-group">
+                    <label for="airDate">Air Date</label>
+                    <input type="date" id="airDate" oninput="saveEpisodeDetails()">
+                </div>
             </div>
 
             <!-- Add Hosts / Guests Section -->
@@ -1007,6 +1015,14 @@
                     <div class="info-item" style="margin: 12px 0;">
                         <span style="font-weight: 600; color: #495057; display: inline-block; min-width: 120px;">Episode Season:</span>
                         <span id="displayEpisodeSeason" style="color: #6c757d;">Not set</span>
+                    </div>
+                    <div class="info-item" style="margin: 12px 0;">
+                        <span style="font-weight: 600; color: #495057; display: inline-block; min-width: 120px;">Recording Date:</span>
+                        <span id="displayRecordingDate" style="color: #6c757d;">Not set</span>
+                    </div>
+                    <div class="info-item" style="margin: 12px 0;">
+                        <span style="font-weight: 600; color: #495057; display: inline-block; min-width: 120px;">Air Date:</span>
+                        <span id="displayAirDate" style="color: #6c757d;">Not set</span>
                     </div>
                 </div>
             </div>
@@ -1193,9 +1209,9 @@
                             Red Gradient
                             <div class="color-preview" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);"></div>
                         </button>
-                        <button class="color-btn" data-color="teal" onclick="changeColorScheme('teal')">
-                            Teal Gradient
-                            <div class="color-preview" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);"></div>
+                        <button class="color-btn" data-color="studiochannel84" onclick="changeColorScheme('studiochannel84')">
+                            Studio:Channel84 Gradient
+                            <div class="color-preview" style="background: linear-gradient(135deg, #00e887 0%, #ea00ff 100%);"></div>
                         </button>
                     </div>
                 </div>
@@ -1203,7 +1219,7 @@
         </div>
     </div>
 
-    <div class="version">Version 1.4</div>
+    <div class="version">Version 1.5</div>
 
     <script>
         // Data storage
@@ -1212,7 +1228,9 @@
         let episodeDetails = {
             title: '',
             number: '',
-            season: ''
+            season: '',
+            recordingDate: '',
+            airDate: ''
         };
         let settings = {
             theme: 'system',
@@ -1697,6 +1715,8 @@
             episodeDetails.title = document.getElementById('episodeTitle').value;
             episodeDetails.number = document.getElementById('episodeNumber').value;
             episodeDetails.season = document.getElementById('episodeSeason').value;
+            episodeDetails.recordingDate = document.getElementById('recordingDate').value;
+            episodeDetails.airDate = document.getElementById('airDate').value;
             updateEpisodeDetailsDisplay();
             saveToCookies();
         }
@@ -1705,6 +1725,8 @@
             document.getElementById('episodeTitle').value = episodeDetails.title || '';
             document.getElementById('episodeNumber').value = episodeDetails.number || '';
             document.getElementById('episodeSeason').value = episodeDetails.season || '';
+            document.getElementById('recordingDate').value = episodeDetails.recordingDate || '';
+            document.getElementById('airDate').value = episodeDetails.airDate || '';
             updateEpisodeDetailsDisplay();
         }
 
@@ -1712,6 +1734,21 @@
             document.getElementById('displayEpisodeTitle').textContent = episodeDetails.title || 'Not set';
             document.getElementById('displayEpisodeNumber').textContent = episodeDetails.number || 'Not set';
             document.getElementById('displayEpisodeSeason').textContent = episodeDetails.season || 'Not set';
+            
+            // Format dates for display
+            if (episodeDetails.recordingDate) {
+                const recDate = new Date(episodeDetails.recordingDate);
+                document.getElementById('displayRecordingDate').textContent = recDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+            } else {
+                document.getElementById('displayRecordingDate').textContent = 'Not set';
+            }
+            
+            if (episodeDetails.airDate) {
+                const aDate = new Date(episodeDetails.airDate);
+                document.getElementById('displayAirDate').textContent = aDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+            } else {
+                document.getElementById('displayAirDate').textContent = 'Not set';
+            }
         }
 
         // Storage management using localStorage
@@ -1736,7 +1773,7 @@
                     const data = JSON.parse(dataString);
                     people = data.people || [];
                     segments = data.segments || [];
-                    episodeDetails = data.episodeDetails || { title: '', number: '', season: '' };
+                    episodeDetails = data.episodeDetails || { title: '', number: '', season: '', recordingDate: '', airDate: '' };
                     console.log('Data loaded successfully:', data);
                 }
             } catch (e) {
@@ -1751,12 +1788,20 @@
             text += '═══════════════════════════════════════════════════════════\n\n';
             
             // Episode Details
-            if (episodeDetails.title || episodeDetails.number || episodeDetails.season) {
+            if (episodeDetails.title || episodeDetails.number || episodeDetails.season || episodeDetails.recordingDate || episodeDetails.airDate) {
                 text += 'EPISODE INFORMATION:\n';
                 text += '───────────────────────────────────────────────────────────\n';
-                if (episodeDetails.title) text += `Title:    ${episodeDetails.title}\n`;
-                if (episodeDetails.number) text += `Number:   ${episodeDetails.number}\n`;
-                if (episodeDetails.season) text += `Season:   ${episodeDetails.season}\n`;
+                if (episodeDetails.title) text += `Title:           ${episodeDetails.title}\n`;
+                if (episodeDetails.number) text += `Number:          ${episodeDetails.number}\n`;
+                if (episodeDetails.season) text += `Season:          ${episodeDetails.season}\n`;
+                if (episodeDetails.recordingDate) {
+                    const recDate = new Date(episodeDetails.recordingDate);
+                    text += `Recording Date:  ${recDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}\n`;
+                }
+                if (episodeDetails.airDate) {
+                    const aDate = new Date(episodeDetails.airDate);
+                    text += `Air Date:        ${aDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}\n`;
+                }
                 text += '\n';
             }
             
@@ -1938,6 +1983,14 @@
             html += `<div class="info-item"><span class="info-label">Title:</span> ${episodeDetails.title || 'Not specified'}</div>`;
             html += `<div class="info-item"><span class="info-label">Episode Number:</span> ${episodeDetails.number || 'Not specified'}</div>`;
             html += `<div class="info-item"><span class="info-label">Season:</span> ${episodeDetails.season || 'Not specified'}</div>`;
+            if (episodeDetails.recordingDate) {
+                const recDate = new Date(episodeDetails.recordingDate);
+                html += `<div class="info-item"><span class="info-label">Recording Date:</span> ${recDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</div>`;
+            }
+            if (episodeDetails.airDate) {
+                const aDate = new Date(episodeDetails.airDate);
+                html += `<div class="info-item"><span class="info-label">Air Date:</span> ${aDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</div>`;
+            }
             html += '</div>';
             
             // People Involved
@@ -2035,7 +2088,18 @@
                         <div style="margin: 8px 0;"><strong style="color: #495057;">Title:</strong> ${episodeDetails.title || 'Not specified'}</div>
                         <div style="margin: 8px 0;"><strong style="color: #495057;">Episode Number:</strong> ${episodeDetails.number || 'Not specified'}</div>
                         <div style="margin: 8px 0;"><strong style="color: #495057;">Season:</strong> ${episodeDetails.season || 'Not specified'}</div>
-                    </div>
+            `;
+            
+            if (episodeDetails.recordingDate) {
+                const recDate = new Date(episodeDetails.recordingDate);
+                html += `<div style="margin: 8px 0;"><strong style="color: #495057;">Recording Date:</strong> ${recDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</div>`;
+            }
+            if (episodeDetails.airDate) {
+                const aDate = new Date(episodeDetails.airDate);
+                html += `<div style="margin: 8px 0;"><strong style="color: #495057;">Air Date:</strong> ${aDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</div>`;
+            }
+            
+            html += `</div>
             `;
             
             // People Involved
