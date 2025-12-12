@@ -1397,6 +1397,16 @@
                 text += '\n';
             }
             
+            // People Involved
+            if (people.length > 0) {
+                text += 'PEOPLE INVOLVED:\n';
+                text += '───────────────────────────────────────────────────────────\n';
+                people.forEach(person => {
+                    text += `• ${person.name} - ${person.roles.join(', ')}\n`;
+                });
+                text += '\n';
+            }
+            
             // Summary
             text += 'EPISODE SUMMARY:\n';
             text += '───────────────────────────────────────────────────────────\n';
@@ -1566,6 +1576,17 @@
             html += `<div class="info-item"><span class="info-label">Episode Number:</span> ${episodeDetails.number || 'Not specified'}</div>`;
             html += `<div class="info-item"><span class="info-label">Season:</span> ${episodeDetails.season || 'Not specified'}</div>`;
             html += '</div>';
+            
+            // People Involved
+            if (people.length > 0) {
+                html += '<div class="info-box">';
+                html += '<h2>People Involved</h2>';
+                people.forEach(person => {
+                    const color = person.color || '#667eea';
+                    html += `<span class="person-badge" style="background: ${color}">${person.name} (${person.roles.join(', ')})</span>`;
+                });
+                html += '</div>';
+            }
             
             // Summary
             html += '<div class="summary">';
