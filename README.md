@@ -5,6 +5,7 @@ A single-page web application for podcast hosts to plan and organize their episo
 ## Requirements
 
 - Modern web browser (Chrome, Firefox, Safari, Edge)
+- **Tablet or larger screen required** - phones are blocked due to resolution limitations
 - No installation required - runs directly from HTML file
 - No internet connection needed (fully offline capable)
 
@@ -64,7 +65,7 @@ A single-page web application for podcast hosts to plan and organize their episo
 - **Technologies**: HTML5, CSS3, Vanilla JavaScript
 - **Dependencies**: None
 - **File Size**: ~60KB single file
-- **Version**: 1.0
+- **Version**: 1.1
 
 ### Data Structure
 ```javascript
@@ -162,6 +163,27 @@ episodeDetails = {
 - No authentication required
 - No server-side processing
 - Safe for sensitive planning information
+
+## Version History
+
+### Version 1.1 (December 2025)
+- Added segment list view in Add Content section with edit/remove functionality
+- Added People Involved section in Planner tab
+- Added people involved to TXT and PDF exports
+- Implemented mobile screen detection (blocks phones, allows tablets/desktop)
+- Screen size automatically checked on load and window resize
+
+### Version 1.0 (December 2025)
+- Initial release
+- Three-tab interface (Planner Details, Planner, Further Help)
+- Add and manage hosts, guests, and producers with color coding
+- Create and organize episode segments
+- Drag-and-drop segment reordering
+- Episode calculator with runtime totals
+- Export as TXT, PDF, and JSON
+- Import from JSON
+- localStorage data persistence
+- Five AI prompts with copy and quick-access buttons
 
 ---
 
