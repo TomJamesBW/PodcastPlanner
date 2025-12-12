@@ -56,6 +56,7 @@ A single-page web application for podcast hosts to plan and organize their episo
 ### Exporting
 - **Plain Text (.txt)**: Simple formatted text document
 - **PDF**: Print-ready formatted document
+- **JPG Image**: High-resolution image export of your episode plan
 - **JSON**: Machine-readable format for backup/sharing
 
 ## Technical Specifications
@@ -63,9 +64,9 @@ A single-page web application for podcast hosts to plan and organize their episo
 ### Architecture
 - **Type**: Single-Page Application (SPA)
 - **Technologies**: HTML5, CSS3, Vanilla JavaScript
-- **Dependencies**: None
+- **Dependencies**: html2canvas (CDN for image export)
 - **File Size**: ~60KB single file
-- **Version**: 1.1
+- **Version**: 1.2
 
 ### Data Structure
 ```javascript
@@ -115,6 +116,7 @@ episodeDetails = {
 #### Export Formats
 - **TXT**: Blob API with text/plain MIME type
 - **PDF**: Window print API with styled HTML
+- **JPG**: html2canvas library for high-DPI image generation (3x scale, auto-sized to content)
 - **JSON**: Blob API with application/json MIME type
 
 #### Import
@@ -165,6 +167,12 @@ episodeDetails = {
 - Safe for sensitive planning information
 
 ## Version History
+
+### Version 1.2 (December 2025)
+- Added JPG image export functionality
+- High-DPI image generation (3x scale) with auto-sizing to content
+- Export includes all visual elements (colors, shapes) without buttons
+- Uses html2canvas library from CDN
 
 ### Version 1.1 (December 2025)
 - Added segment list view in Add Content section with edit/remove functionality

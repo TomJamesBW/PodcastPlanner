@@ -788,6 +788,7 @@
             margin-bottom: 20px;
         }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
     <!-- Mobile Warning Overlay -->
@@ -958,6 +959,7 @@
                 <h2>Export</h2>
                 <button class="btn btn-primary" onclick="exportAsPlainText()">📄 Export as Plain Text</button>
                 <button class="btn btn-secondary" onclick="exportAsPDF()">📑 Export as PDF</button>
+                <button class="btn btn-primary" onclick="exportAsJPG()">🖼️ Export to JPG</button>
                 <button class="btn btn-primary" onclick="exportAsJSON()">💾 Export Show as JSON</button>
                 <button class="btn btn-secondary" onclick="importFromJSON()">📂 Import Show as JSON</button>
                 <input type="file" id="jsonFileInput" accept=".json" style="display: none;" onchange="handleJSONImport(event)">
@@ -1069,7 +1071,7 @@
         </div>
     </div>
 
-    <div class="version">Version 1.1</div>
+    <div class="version">Version 1.2</div>
 
     <script>
         // Data storage
@@ -1768,6 +1770,125 @@
             setTimeout(() => {
                 printWindow.print();
             }, 250);
+        }
+
+        // Export as JPG functionality
+        function exportAsJPG() {
+            // Create a container for export content
+            const exportContainer = document.createElement('div');
+            exportContainer.style.cssText = 'position: absolute; left: -9999px; top: 0; background: white; padding: 40px; font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;';
+            
+            // Build the export HTML
+            let html = `
+                <div style="max-width: 1000px;">
+                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; border-radius: 10px; margin-bottom: 30px;">
+                        <h1 style="font-size: 2.5em; margin: 0 0 10px 0;">🎙️ Podcast Planner</h1>
+                        <p style="margin: 0; font-size: 1.1em;">Episode Planning Document</p>
+                    </div>
+                    
+                    <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #667eea;">
+                        <h2 style="margin-top: 0; color: #667eea; font-size: 1.5em;">Episode Information</h2>
+                        <div style="margin: 8px 0;"><strong style="color: #495057;">Title:</strong> ${episodeDetails.title || 'Not specified'}</div>
+                        <div style="margin: 8px 0;"><strong style="color: #495057;">Episode Number:</strong> ${episodeDetails.number || 'Not specified'}</div>
+                        <div style="margin: 8px 0;"><strong style="color: #495057;">Season:</strong> ${episodeDetails.season || 'Not specified'}</div>
+                    </div>
+            `;
+            
+            // People Involved
+            if (people.length > 0) {
+                html += '<div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #667eea;">';
+                html += '<h2 style="margin-top: 0; color: #667eea; font-size: 1.5em;">People Involved</h2>';
+                html += '<div style="display: flex; flex-wrap: wrap; gap: 10px;">';
+                people.forEach(person => {
+                    const color = person.color || '#667eea';
+                    html += `<span style="display: inline-block; padding: 8px 16px; border-radius: 6px; background: ${color}; color: white; font-weight: 600; font-size: 14px;">${person.name} (${person.roles.join(', ')})</span>`;
+                });
+                html += '</div></div>';
+            }
+            
+            // Summary
+            html += '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 30px;">';
+            html += `<div style="background: #667eea; color: white; padding: 20px; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 12px; opacity: 0.9;">Total Segments</div>
+                        <div style="font-size: 2em; font-weight: bold; margin-top: 5px;">${segments.length}</div>
+                     </div>`;
+            html += `<div style="background: #667eea; color: white; padding: 20px; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 12px; opacity: 0.9;">Total Runtime</div>
+                        <div style="font-size: 2em; font-weight: bold; margin-top: 5px;">${segments.reduce((sum, s) => sum + s.time, 0)} min</div>
+                     </div>`;
+            html += '</div>';
+            
+            // Segments
+            if (segments.length > 0) {
+                html += '<h2 style="color: #667eea; margin-bottom: 20px; font-size: 1.5em;">Episode Segments</h2>';
+                segments.forEach((segment, index) => {
+                    html += `<div style="background: white; border: 2px solid #dee2e6; border-radius: 10px; padding: 20px; margin-bottom: 20px;">`;
+                    html += `<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #667eea;">`;
+                    html += `<div style="font-size: 1.3em; font-weight: bold; color: #495057;">${index + 1}. ${segment.title}</div>`;
+                    html += `<div style="background: #667eea; color: white; padding: 8px 16px; border-radius: 20px; font-weight: 600;">${segment.time} min</div>`;
+                    html += `</div>`;
+                    
+                    if (segment.description) {
+                        html += `<div style="color: #6c757d; margin-bottom: 15px;">${segment.description}</div>`;
+                    }
+                    
+                    if (segment.keyPoints && segment.keyPoints.length > 0) {
+                        html += '<div style="margin: 15px 0;">';
+                        html += '<h3 style="font-size: 14px; color: #495057; margin-bottom: 8px;">Key Points:</h3>';
+                        html += '<ul style="margin: 5px 0; padding-left: 25px;">';
+                        segment.keyPoints.forEach(point => {
+                            html += `<li style="margin: 5px 0;">${point}</li>`;
+                        });
+                        html += '</ul></div>';
+                    }
+                    
+                    if (segment.assignedPeople && segment.assignedPeople.length > 0) {
+                        html += '<div style="margin-top: 15px;">';
+                        html += '<h3 style="font-size: 14px; color: #495057; margin-bottom: 8px;">Assigned People:</h3>';
+                        html += '<div style="display: flex; flex-wrap: wrap; gap: 8px;">';
+                        segment.assignedPeople.forEach(person => {
+                            const color = person.color || '#667eea';
+                            html += `<span style="display: inline-block; padding: 6px 12px; border-radius: 6px; background: ${color}; color: white; font-weight: 600; font-size: 12px;">${person.name} (${person.roles.join(', ')})</span>`;
+                        });
+                        html += '</div></div>';
+                    }
+                    
+                    html += '</div>';
+                });
+            }
+            
+            html += `<div style="text-align: center; color: #6c757d; font-size: 12px; margin-top: 40px; padding-top: 20px; border-top: 1px solid #dee2e6;">Generated by Podcast Planner Tool on ${new Date().toLocaleDateString()}</div>`;
+            html += '</div>';
+            
+            exportContainer.innerHTML = html;
+            document.body.appendChild(exportContainer);
+            
+            // Use html2canvas to capture the content
+            html2canvas(exportContainer.firstElementChild, {
+                scale: 3, // High DPI
+                backgroundColor: '#ffffff',
+                logging: false,
+                useCORS: true
+            }).then(canvas => {
+                // Convert to JPG
+                canvas.toBlob(function(blob) {
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `podcast-planner-${episodeDetails.title || 'episode'}-${new Date().toISOString().split('T')[0]}.jpg`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                    
+                    // Clean up
+                    document.body.removeChild(exportContainer);
+                }, 'image/jpeg', 0.95);
+            }).catch(err => {
+                console.error('Error generating image:', err);
+                alert('Failed to generate image. Please try again.');
+                document.body.removeChild(exportContainer);
+            });
         }
 
         // JSON Export/Import functionality
