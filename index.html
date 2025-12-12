@@ -1,0 +1,1739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Podcast Planner Tool</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 20px;
+            text-align: center;
+            background: #f8f9fa;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            color: #495057;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab:hover {
+            background: #e9ecef;
+        }
+
+        .tab.active {
+            background: white;
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 30px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section {
+            margin-bottom: 40px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="number"],
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #dee2e6;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            gap: 20px;
+            margin-top: 10px;
+        }
+
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.4);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 12px;
+        }
+
+        .key-points-container {
+            margin-top: 10px;
+        }
+
+        .key-point-item {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+
+        .key-point-item input {
+            flex: 1;
+        }
+
+        .people-list {
+            margin-top: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .segment-list {
+            margin-top: 20px;
+        }
+
+        .person-item {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            border: 3px solid #dee2e6;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .person-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .segment-item {
+            background: white;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border: 2px solid #dee2e6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .person-info {
+            flex: 1;
+            text-align: center;
+        }
+
+        .person-info strong {
+            color: #495057;
+            font-size: 18px;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .person-color-bar {
+            height: 6px;
+            border-radius: 3px;
+            margin-bottom: 12px;
+        }
+
+        .person-item .btn {
+            width: 100%;
+        }
+
+        .person-badges {
+            display: flex;
+            gap: 8px;
+            margin-top: 5px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-host {
+            background: #667eea;
+            color: white;
+        }
+
+        .badge-guest {
+            background: #28a745;
+            color: white;
+        }
+
+        .badge-producer {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .badge-custom {
+            color: white;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .color-picker-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .color-picker-group input[type="color"] {
+            width: 60px;
+            height: 40px;
+            border: 2px solid #dee2e6;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .segment-item {
+            flex-direction: column;
+            align-items: stretch;
+            position: relative;
+            cursor: move;
+            transition: all 0.2s ease;
+        }
+
+        .segment-item.dragging {
+            opacity: 0.5;
+            transform: scale(0.95);
+        }
+
+        .segment-item.drag-over {
+            border-color: #667eea;
+            border-width: 3px;
+            background: #f0f3ff;
+        }
+
+        .segment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .segment-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #495057;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .drag-handle {
+            cursor: grab;
+            color: #6c757d;
+            font-size: 20px;
+        }
+
+        .drag-handle:active {
+            cursor: grabbing;
+        }
+
+        .segment-time {
+            background: #667eea;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .segment-description {
+            color: #6c757d;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .segment-key-points {
+            margin-bottom: 15px;
+        }
+
+        .segment-key-points ul {
+            margin-left: 20px;
+            color: #495057;
+        }
+
+        .segment-key-points li {
+            margin-bottom: 5px;
+        }
+
+        .segment-people {
+            margin-bottom: 15px;
+        }
+
+        .segment-people-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .segment-actions {
+            display: grid;
+            grid-template-columns: 1fr auto auto;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .calculator-item {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid #dee2e6;
+        }
+
+        .calculator-label {
+            font-size: 14px;
+            color: #6c757d;
+            margin-bottom: 8px;
+        }
+
+        .calculator-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #6c757d;
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #dee2e6;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+            cursor: pointer;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .char-counter {
+            font-size: 12px;
+            color: #6c757d;
+            text-align: right;
+            margin-top: 5px;
+        }
+
+        .prompt-box {
+            background: white;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .prompt-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f3ff;
+        }
+
+        .prompt-instructions {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 12px 15px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+            color: #856404;
+            font-size: 14px;
+        }
+
+        .prompt-instructions strong {
+            display: block;
+            margin-bottom: 5px;
+            color: #856404;
+        }
+
+        .prompt-text {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            font-size: 15px;
+            line-height: 1.6;
+            color: #495057;
+            margin-bottom: 15px;
+            min-height: 80px;
+        }
+
+        .prompt-actions {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .copy-feedback {
+            display: inline-block;
+            color: #28a745;
+            font-size: 14px;
+            margin-right: 10px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .copy-feedback.show {
+            opacity: 1;
+        }
+
+        .upload-zone {
+            border: 3px dashed #dee2e6;
+            border-radius: 12px;
+            padding: 60px 40px;
+            text-align: center;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .upload-zone:hover {
+            border-color: #667eea;
+            background: #f0f3ff;
+        }
+
+        .upload-zone.drag-over {
+            border-color: #667eea;
+            background: #e6ebff;
+            transform: scale(1.02);
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .upload-text {
+            font-size: 18px;
+            color: #495057;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .upload-hint {
+            font-size: 14px;
+            color: #6c757d;
+        }
+
+        .file-info {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px solid #28a745;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .file-info.show {
+            display: block;
+        }
+
+        .file-name {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 8px;
+        }
+
+        .file-size {
+            color: #6c757d;
+            font-size: 14px;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #f5c6cb;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .upload-zone {
+            border: 3px dashed #dee2e6;
+            border-radius: 12px;
+            padding: 60px 40px;
+            text-align: center;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .upload-zone:hover {
+            border-color: #667eea;
+            background: #f0f3ff;
+        }
+
+        .upload-zone.drag-over {
+            border-color: #667eea;
+            background: #e6ebff;
+            transform: scale(1.02);
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .upload-text {
+            font-size: 18px;
+            color: #495057;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .upload-hint {
+            font-size: 14px;
+            color: #6c757d;
+        }
+
+        .file-info {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px solid #28a745;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .file-info.show {
+            display: block;
+        }
+
+        .file-name {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 8px;
+        }
+
+        .file-size {
+            color: #6c757d;
+            font-size: 14px;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #f5c6cb;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎙️ Podcast Planner Tool</h1>
+            <p>Plan, organize, and structure your podcast episodes</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab(0)">+ Planner Details</button>
+            <button class="tab" onclick="switchTab(1)">Planner</button>
+            <button class="tab" onclick="switchTab(2)">Further Help</button>
+        </div>
+
+        <!-- Tab 1: Planner Details -->
+        <div class="tab-content active">
+            <!-- Podcast Episode Details -->
+            <div class="section">
+                <h2>Podcast Episode Details</h2>
+                <div class="form-group">
+                    <label for="episodeTitle">Episode Title</label>
+                    <input type="text" id="episodeTitle" placeholder="Enter episode title" oninput="saveEpisodeDetails()">
+                </div>
+                <div class="form-group">
+                    <label for="episodeNumber">Episode Number</label>
+                    <input type="text" id="episodeNumber" placeholder="Enter episode number" oninput="saveEpisodeDetails()">
+                </div>
+                <div class="form-group">
+                    <label for="episodeSeason">Episode Season</label>
+                    <input type="text" id="episodeSeason" placeholder="Enter episode season" oninput="saveEpisodeDetails()">
+                </div>
+            </div>
+
+            <!-- Add Hosts / Guests Section -->
+            <div class="section">
+                <h2>Add Hosts / Guests</h2>
+                <div class="form-group">
+                    <label for="personName">Name</label>
+                    <input type="text" id="personName" placeholder="Enter name">
+                </div>
+                <div class="form-group">
+                    <label>Role(s)</label>
+                    <div class="checkbox-group">
+                        <label>
+                            <input type="checkbox" id="roleHost" value="host">
+                            Host
+                        </label>
+                        <label>
+                            <input type="checkbox" id="roleGuest" value="guest">
+                            Guest
+                        </label>
+                        <label>
+                            <input type="checkbox" id="roleProducer" value="producer">
+                            Producer
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="personColor">Color</label>
+                    <div class="color-picker-group">
+                        <input type="color" id="personColor" value="#667eea">
+                        <span>Choose a color to represent this person</span>
+                    </div>
+                </div>
+                <button class="btn btn-primary" onclick="addPerson()">Add Person</button>
+                
+                <div class="people-list" id="peopleList"></div>
+            </div>
+
+            <!-- Add Content Section -->
+            <div class="section">
+                <h2>Add Content</h2>
+                <div class="form-group">
+                    <label for="segmentTitle">Segment Title</label>
+                    <input type="text" id="segmentTitle" placeholder="Enter segment title">
+                </div>
+                <div class="form-group">
+                    <label for="segmentDescription">Brief Description</label>
+                    <textarea id="segmentDescription" placeholder="Enter brief description (max 500 characters)" maxlength="500" oninput="updateCharCounter()"></textarea>
+                    <div class="char-counter" id="charCounter">0 / 500</div>
+                </div>
+                <div class="form-group">
+                    <label>Key Points</label>
+                    <div class="key-points-container" id="keyPointsContainer">
+                        <div class="key-point-item">
+                            <input type="text" class="key-point-input" placeholder="Enter key point">
+                            <button class="btn btn-primary btn-small" onclick="addKeyPoint()">Add</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="estimatedTime">Estimated Time (Minutes)</label>
+                    <input type="number" id="estimatedTime" placeholder="Enter estimated time in minutes" min="1">
+                </div>
+                <button class="btn btn-primary" onclick="addSegment()">Add Segment</button>
+            </div>
+
+            <!-- Clear Data Section -->
+            <div class="section">
+                <h2>Clear Data</h2>
+                <button class="btn btn-danger" onclick="clearPeople()">Clear Hosts / Guests</button>
+                <button class="btn btn-danger" onclick="clearSegments()">Clear Segments</button>
+            </div>
+        </div>
+
+        <!-- Tab 2: Planner -->
+        <div class="tab-content">
+            <!-- Podcast Episode Details Display -->
+            <div class="section">
+                <h2>Podcast Episode Details</h2>
+                <div class="info-box" style="background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #667eea;">
+                    <div class="info-item" style="margin: 12px 0;">
+                        <span style="font-weight: 600; color: #495057; display: inline-block; min-width: 120px;">Episode Title:</span>
+                        <span id="displayEpisodeTitle" style="color: #6c757d;">Not set</span>
+                    </div>
+                    <div class="info-item" style="margin: 12px 0;">
+                        <span style="font-weight: 600; color: #495057; display: inline-block; min-width: 120px;">Episode Number:</span>
+                        <span id="displayEpisodeNumber" style="color: #6c757d;">Not set</span>
+                    </div>
+                    <div class="info-item" style="margin: 12px 0;">
+                        <span style="font-weight: 600; color: #495057; display: inline-block; min-width: 120px;">Episode Season:</span>
+                        <span id="displayEpisodeSeason" style="color: #6c757d;">Not set</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Episode Calculator -->
+            <div class="section">
+                <h2>Episode Calculator</h2>
+                <div class="calculator-grid">
+                    <div class="calculator-item">
+                        <div class="calculator-label">Number of Segments</div>
+                        <div class="calculator-value" id="segmentCount">0</div>
+                    </div>
+                    <div class="calculator-item">
+                        <div class="calculator-label">Total Runtime (Minutes)</div>
+                        <div class="calculator-value" id="totalRuntime">0</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Segments List -->
+            <div class="section">
+                <h2>Episode Segments</h2>
+                <div class="segment-list" id="segmentList"></div>
+            </div>
+
+            <!-- Export Section -->
+            <div class="section">
+                <h2>Export</h2>
+                <button class="btn btn-primary" onclick="exportAsPlainText()">📄 Export as Plain Text</button>
+                <button class="btn btn-secondary" onclick="exportAsPDF()">📑 Export as PDF</button>
+                <button class="btn btn-primary" onclick="exportAsJSON()">💾 Export Show as JSON</button>
+                <button class="btn btn-secondary" onclick="importFromJSON()">📂 Import Show as JSON</button>
+                <input type="file" id="jsonFileInput" accept=".json" style="display: none;" onchange="handleJSONImport(event)">
+            </div>
+        </div>
+
+        <!-- Tab 3: Further Help -->
+        <div class="tab-content">
+            <!-- AI Helpers Section -->
+            <div class="section">
+                <h2>AI Helpers</h2>
+                <p style="color: #6c757d; margin-bottom: 20px;">Use these AI tools to help with podcast planning, script writing, and content ideas:</p>
+                <button class="btn btn-primary" onclick="window.open('https://copilot.microsoft.com/', '_blank')">
+                    🤖 Microsoft Copilot
+                </button>
+                <button class="btn btn-primary" onclick="window.open('https://gemini.google.com/', '_blank')">
+                    🤖 Google Gemini
+                </button>
+                <button class="btn btn-primary" onclick="window.open('https://chat.openai.com/', '_blank')">
+                    🤖 ChatGPT
+                </button>
+            </div>
+
+            <!-- Useful Prompts Section -->
+            <div class="section">
+                <h2>Useful Prompts</h2>
+                <p style="color: #6c757d; margin-bottom: 20px;">AI is best used with a transcript file in txt format. If you do not have a transcript yet, you can use the Export as plain text option on the planner page (ensure you put as much info as you can in to the segments).</p>
+                
+                <!-- Prompt 1 -->
+                <div class="prompt-box">
+                    <div class="prompt-title">Get Metadata</div>
+                    <div class="prompt-instructions">
+                        <strong>📋 Instructions:</strong>
+                        Add your transcript to the Chat agent before using this prompt.
+                    </div>
+                    <div class="prompt-text" id="prompt1">
+                        Please read my transcript, break it in to sections and then create me an SEO rich meta data for my show. You can use emojis but also ensure its clear to read.
+                    </div>
+                    <div class="prompt-actions">
+                        <span class="copy-feedback" id="feedback1">✓ Copied!</span>
+                        <button class="btn btn-primary btn-small" onclick="copyPrompt('prompt1', 'feedback1')">Copy Prompt</button>
+                    </div>
+                </div>
+
+                <!-- Prompt 2 -->
+                <div class="prompt-box">
+                    <div class="prompt-title">Get Episode Titles</div>
+                    <div class="prompt-instructions">
+                        <strong>📋 Instructions:</strong>
+                        Add your transcript to the Chat agent before using this prompt.
+                    </div>
+                    <div class="prompt-text" id="prompt2">
+                        Using my transcript, give me 5 normal titles, 5 SEO rich titles, 5 funny / weird / interesting titles.
+                    </div>
+                    <div class="prompt-actions">
+                        <span class="copy-feedback" id="feedback2">✓ Copied!</span>
+                        <button class="btn btn-primary btn-small" onclick="copyPrompt('prompt2', 'feedback2')">Copy Prompt</button>
+                    </div>
+                </div>
+
+                <!-- Prompt 3 -->
+                <div class="prompt-box">
+                    <div class="prompt-title">Get Keywords</div>
+                    <div class="prompt-instructions">
+                        <strong>📋 Instructions:</strong>
+                        Add your transcript to the Chat agent before using this prompt.
+                    </div>
+                    <div class="prompt-text" id="prompt3">
+                        Using my transcript, give me the following: a comma separated list of SEO keywords. The same list as hashtags.
+                    </div>
+                    <div class="prompt-actions">
+                        <span class="copy-feedback" id="feedback3">✓ Copied!</span>
+                        <button class="btn btn-primary btn-small" onclick="copyPrompt('prompt3', 'feedback3')">Copy Prompt</button>
+                    </div>
+                </div>
+
+                <!-- Prompt 4 -->
+                <div class="prompt-box">
+                    <div class="prompt-title">Generate Social Media Content</div>
+                    <div class="prompt-instructions">
+                        <strong>📋 Instructions:</strong>
+                        Add your transcript to the Chat agent before using this prompt.
+                    </div>
+                    <div class="prompt-text" id="prompt4">
+                        Using my transcript, create me 8 days of social media posts that fit to the standard limit of 'x.com'. The first one should be for 'Out Tomorrow', the next should be 'Out Now' with the rest acting as reminders the episode is released.
+                    </div>
+                    <div class="prompt-actions">
+                        <span class="copy-feedback" id="feedback4">✓ Copied!</span>
+                        <button class="btn btn-primary btn-small" onclick="copyPrompt('prompt4', 'feedback4')">Copy Prompt</button>
+                    </div>
+                </div>
+
+                <!-- Prompt 5 -->
+                <div class="prompt-box">
+                    <div class="prompt-title">Generate Single Social Media Content</div>
+                    <div class="prompt-instructions">
+                        <strong>📋 Instructions:</strong>
+                        Add your transcript to the Chat agent before using this prompt.
+                    </div>
+                    <div class="prompt-text" id="prompt5">
+                        Using my transcript, create me a random, social media reminder that fits to the maximum of 'x.com'.
+                    </div>
+                    <div class="prompt-actions">
+                        <span class="copy-feedback" id="feedback5">✓ Copied!</span>
+                        <button class="btn btn-primary btn-small" onclick="copyPrompt('prompt5', 'feedback5')">Copy Prompt</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data storage
+        let people = [];
+        let segments = [];
+        let episodeDetails = {
+            title: '',
+            number: '',
+            season: ''
+        };
+
+        // Load data from cookies on page load
+        window.onload = function() {
+            loadFromCookies();
+            renderPeople();
+            renderSegments();
+            updateCalculator();
+            loadEpisodeDetails();
+        };
+
+        // Tab switching
+        function switchTab(tabIndex) {
+            const tabs = document.querySelectorAll('.tab');
+            const contents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach((tab, index) => {
+                if (index === tabIndex) {
+                    tab.classList.add('active');
+                    contents[index].classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                    contents[index].classList.remove('active');
+                }
+            });
+
+            // Update segment list when switching to Planner tab
+            if (tabIndex === 1) {
+                renderSegments();
+                updateCalculator();
+            }
+        }
+
+        // Character counter for description
+        function updateCharCounter() {
+            const description = document.getElementById('segmentDescription').value;
+            document.getElementById('charCounter').textContent = `${description.length} / 500`;
+        }
+
+        // Add person
+        function addPerson() {
+            const name = document.getElementById('personName').value.trim();
+            const isHost = document.getElementById('roleHost').checked;
+            const isGuest = document.getElementById('roleGuest').checked;
+            const isProducer = document.getElementById('roleProducer').checked;
+            const color = document.getElementById('personColor').value;
+
+            if (!name) {
+                alert('Please enter a name');
+                return;
+            }
+
+            if (!isHost && !isGuest && !isProducer) {
+                alert('Please select at least one role');
+                return;
+            }
+
+            const roles = [];
+            if (isHost) roles.push('host');
+            if (isGuest) roles.push('guest');
+            if (isProducer) roles.push('producer');
+
+            people.push({ name, roles, color });
+            
+            console.log('Person added:', { name, roles, color });
+            console.log('People array now:', people);
+            
+            // Clear form
+            document.getElementById('personName').value = '';
+            document.getElementById('roleHost').checked = false;
+            document.getElementById('roleGuest').checked = false;
+            document.getElementById('roleProducer').checked = false;
+            document.getElementById('personColor').value = '#667eea';
+
+            saveToCookies();
+            renderPeople();
+        }
+
+        // Remove person
+        function removePerson(index) {
+            people.splice(index, 1);
+            saveToCookies();
+            renderPeople();
+            renderSegments(); // Update segments display
+        }
+
+        // Render people list
+        function renderPeople() {
+            const container = document.getElementById('peopleList');
+            
+            if (people.length === 0) {
+                container.innerHTML = '<div class="empty-state"><p>No hosts, guests, or producers added yet</p></div>';
+                return;
+            }
+
+            container.innerHTML = people.map((person, index) => `
+                <div class="person-item" style="border-color: ${person.color || '#dee2e6'}">
+                    <div class="person-color-bar" style="background: ${person.color || '#667eea'}"></div>
+                    <div class="person-info">
+                        <strong>${person.name}</strong>
+                        <div class="person-badges">
+                            ${person.roles.map(role => `
+                                <span class="badge badge-custom" style="background: ${person.color || '#667eea'}">${role.charAt(0).toUpperCase() + role.slice(1)}</span>
+                            `).join('')}
+                        </div>
+                    </div>
+                    <button class="btn btn-danger btn-small" onclick="removePerson(${index})">Remove</button>
+                </div>
+            `).join('');
+        }
+
+        // Add key point
+        function addKeyPoint() {
+            const container = document.getElementById('keyPointsContainer');
+            
+            // Find all existing key point items
+            const existingItems = container.querySelectorAll('.key-point-item');
+            
+            // Replace the Add button with Remove button in all existing items
+            existingItems.forEach(item => {
+                const button = item.querySelector('button');
+                if (button && button.textContent === 'Add') {
+                    button.textContent = 'Remove';
+                    button.className = 'btn btn-danger btn-small';
+                    button.setAttribute('onclick', 'removeKeyPoint(this)');
+                }
+            });
+            
+            // Create new key point with Add button
+            const newKeyPoint = document.createElement('div');
+            newKeyPoint.className = 'key-point-item';
+            newKeyPoint.innerHTML = `
+                <input type="text" class="key-point-input" placeholder="Enter key point">
+                <button class="btn btn-primary btn-small" onclick="addKeyPoint()">Add</button>
+            `;
+            container.appendChild(newKeyPoint);
+        }
+
+        // Remove key point
+        function removeKeyPoint(button) {
+            const container = document.getElementById('keyPointsContainer');
+            const items = container.querySelectorAll('.key-point-item');
+            
+            // Don't allow removing if it's the last item
+            if (items.length <= 1) {
+                alert('You must have at least one key point field');
+                return;
+            }
+            
+            button.parentElement.remove();
+        }
+
+        // Add segment
+        function addSegment() {
+            const title = document.getElementById('segmentTitle').value.trim();
+            const description = document.getElementById('segmentDescription').value.trim();
+            const time = parseInt(document.getElementById('estimatedTime').value);
+
+            if (!title) {
+                alert('Please enter a segment title');
+                return;
+            }
+
+            if (!time || time <= 0) {
+                alert('Please enter a valid estimated time');
+                return;
+            }
+
+            // Get all key points
+            const keyPointInputs = document.querySelectorAll('.key-point-input');
+            const keyPoints = Array.from(keyPointInputs)
+                .map(input => input.value.trim())
+                .filter(point => point !== '');
+
+            segments.push({
+                title,
+                description,
+                keyPoints,
+                time,
+                assignedPeople: []
+            });
+
+            console.log('Segment added:', { title, description, keyPoints, time });
+            console.log('Segments array now:', segments);
+
+            // Clear form
+            document.getElementById('segmentTitle').value = '';
+            document.getElementById('segmentDescription').value = '';
+            document.getElementById('estimatedTime').value = '';
+            document.getElementById('keyPointsContainer').innerHTML = `
+                <div class="key-point-item">
+                    <input type="text" class="key-point-input" placeholder="Enter key point">
+                    <button class="btn btn-primary btn-small" onclick="addKeyPoint()">Add</button>
+                </div>
+            `;
+            updateCharCounter();
+
+            saveToCookies();
+        }
+
+        // Assign person to segment
+        function assignPersonToSegment(segmentIndex) {
+            if (people.length === 0) {
+                alert('Please add hosts, guests, or producers first in the Planner Details tab');
+                return;
+            }
+
+            const select = document.getElementById(`person-select-${segmentIndex}`);
+            const selectedIndex = parseInt(select.value);
+
+            if (selectedIndex === -1) {
+                return;
+            }
+
+            const person = people[selectedIndex];
+            
+            // Check if person is already assigned
+            if (segments[segmentIndex].assignedPeople.some(p => p.name === person.name)) {
+                alert('This person is already assigned to this segment');
+                return;
+            }
+
+            segments[segmentIndex].assignedPeople.push(person);
+            saveToCookies();
+            renderSegments();
+        }
+
+        // Remove person from segment
+        function removePersonFromSegment(segmentIndex, personIndex) {
+            segments[segmentIndex].assignedPeople.splice(personIndex, 1);
+            saveToCookies();
+            renderSegments();
+        }
+
+        // Remove segment
+        function removeSegment(index) {
+            if (confirm('Are you sure you want to remove this segment?')) {
+                segments.splice(index, 1);
+                saveToCookies();
+                renderSegments();
+                updateCalculator();
+            }
+        }
+
+        // Render segments
+        function renderSegments() {
+            const container = document.getElementById('segmentList');
+            
+            if (segments.length === 0) {
+                container.innerHTML = '<div class="empty-state"><p>No segments added yet. Go to Planner Details tab to add segments.</p></div>';
+                return;
+            }
+
+            container.innerHTML = segments.map((segment, index) => `
+                <div class="segment-item" draggable="true" data-index="${index}" 
+                     ondragstart="handleDragStart(event)" 
+                     ondragend="handleDragEnd(event)" 
+                     ondragover="handleDragOver(event)" 
+                     ondrop="handleDrop(event)" 
+                     ondragleave="handleDragLeave(event)">
+                    <div class="segment-header">
+                        <div class="segment-title">
+                            <span class="drag-handle">⋮⋮</span>
+                            ${segment.title}
+                        </div>
+                        <div class="segment-time">${segment.time} min</div>
+                    </div>
+                    ${segment.description ? `<div class="segment-description">${segment.description}</div>` : ''}
+                    ${segment.keyPoints.length > 0 ? `
+                        <div class="segment-key-points">
+                            <strong>Key Points:</strong>
+                            <ul>
+                                ${segment.keyPoints.map(point => `<li>${point}</li>`).join('')}
+                            </ul>
+                        </div>
+                    ` : ''}
+                    <div class="segment-people">
+                        <strong>Assigned People:</strong>
+                        <div class="segment-people-list">
+                            ${segment.assignedPeople.length > 0 ? segment.assignedPeople.map((person, personIndex) => `
+                                <div class="person-item" style="margin-bottom: 0; border-color: ${person.color || '#dee2e6'}; padding: 12px;">
+                                    <div class="person-color-bar" style="background: ${person.color || '#667eea'}"></div>
+                                    <div class="person-info">
+                                        <strong>${person.name}</strong>
+                                        <div class="person-badges">
+                                            ${person.roles.map(role => `
+                                                <span class="badge badge-custom" style="background: ${person.color || '#667eea'}">${role.charAt(0).toUpperCase() + role.slice(1)}</span>
+                                            `).join('')}
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-danger btn-small" onclick="removePersonFromSegment(${index}, ${personIndex})">Remove</button>
+                                </div>
+                            `).join('') : '<em style="color: #6c757d;">No one assigned yet</em>'}
+                        </div>
+                    </div>
+                    <div class="segment-actions">
+                        <select id="person-select-${index}">
+                            <option value="-1">Select person to add...</option>
+                            ${people.map((person, personIndex) => `
+                                <option value="${personIndex}">${person.name} (${person.roles.join(', ')})</option>
+                            `).join('')}
+                        </select>
+                        <button class="btn btn-primary" onclick="assignPersonToSegment(${index})">Add Host / Guest</button>
+                        <button class="btn btn-danger" onclick="removeSegment(${index})">Remove Segment</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Update calculator
+        function updateCalculator() {
+            const segmentCount = segments.length;
+            const totalRuntime = segments.reduce((sum, segment) => sum + segment.time, 0);
+
+            document.getElementById('segmentCount').textContent = segmentCount;
+            document.getElementById('totalRuntime').textContent = totalRuntime;
+        }
+
+        // Clear people
+        function clearPeople() {
+            if (confirm('Are you sure you want to clear all hosts, guests, and producers?')) {
+                people = [];
+                saveToCookies();
+                renderPeople();
+                renderSegments(); // Update segments to remove assigned people
+            }
+        }
+
+        // Clear segments
+        function clearSegments() {
+            if (confirm('Are you sure you want to clear all segments?')) {
+                segments = [];
+                saveToCookies();
+                renderSegments();
+                updateCalculator();
+            }
+        }
+
+        // Episode details
+        function saveEpisodeDetails() {
+            episodeDetails.title = document.getElementById('episodeTitle').value;
+            episodeDetails.number = document.getElementById('episodeNumber').value;
+            episodeDetails.season = document.getElementById('episodeSeason').value;
+            updateEpisodeDetailsDisplay();
+            saveToCookies();
+        }
+
+        function loadEpisodeDetails() {
+            document.getElementById('episodeTitle').value = episodeDetails.title || '';
+            document.getElementById('episodeNumber').value = episodeDetails.number || '';
+            document.getElementById('episodeSeason').value = episodeDetails.season || '';
+            updateEpisodeDetailsDisplay();
+        }
+
+        function updateEpisodeDetailsDisplay() {
+            document.getElementById('displayEpisodeTitle').textContent = episodeDetails.title || 'Not set';
+            document.getElementById('displayEpisodeNumber').textContent = episodeDetails.number || 'Not set';
+            document.getElementById('displayEpisodeSeason').textContent = episodeDetails.season || 'Not set';
+        }
+
+        // Storage management using localStorage
+        function saveToCookies() {
+            const data = {
+                people,
+                segments,
+                episodeDetails
+            };
+            try {
+                localStorage.setItem('podcastPlannerData', JSON.stringify(data));
+                console.log('Data saved successfully');
+            } catch (e) {
+                console.error('Error saving data:', e);
+            }
+        }
+
+        function loadFromCookies() {
+            try {
+                const dataString = localStorage.getItem('podcastPlannerData');
+                if (dataString) {
+                    const data = JSON.parse(dataString);
+                    people = data.people || [];
+                    segments = data.segments || [];
+                    episodeDetails = data.episodeDetails || { title: '', number: '', season: '' };
+                    console.log('Data loaded successfully:', data);
+                }
+            } catch (e) {
+                console.error('Error loading data:', e);
+            }
+        }
+
+        // Export functionality
+        function exportAsPlainText() {
+            let text = '═══════════════════════════════════════════════════════════\n';
+            text += '           PODCAST PLANNER - EPISODE DETAILS\n';
+            text += '═══════════════════════════════════════════════════════════\n\n';
+            
+            // Episode Details
+            if (episodeDetails.title || episodeDetails.number || episodeDetails.season) {
+                text += 'EPISODE INFORMATION:\n';
+                text += '───────────────────────────────────────────────────────────\n';
+                if (episodeDetails.title) text += `Title:    ${episodeDetails.title}\n`;
+                if (episodeDetails.number) text += `Number:   ${episodeDetails.number}\n`;
+                if (episodeDetails.season) text += `Season:   ${episodeDetails.season}\n`;
+                text += '\n';
+            }
+            
+            // Summary
+            text += 'EPISODE SUMMARY:\n';
+            text += '───────────────────────────────────────────────────────────\n';
+            text += `Total Segments:    ${segments.length}\n`;
+            text += `Total Runtime:     ${segments.reduce((sum, s) => sum + s.time, 0)} minutes\n`;
+            text += '\n\n';
+            
+            // Segments
+            if (segments.length > 0) {
+                text += 'EPISODE SEGMENTS:\n';
+                text += '═══════════════════════════════════════════════════════════\n\n';
+                
+                segments.forEach((segment, index) => {
+                    text += `${index + 1}. ${segment.title.toUpperCase()}\n`;
+                    text += `   Duration: ${segment.time} minutes\n\n`;
+                    
+                    if (segment.description) {
+                        text += `   Description:\n`;
+                        text += `   ${segment.description}\n\n`;
+                    }
+                    
+                    if (segment.keyPoints && segment.keyPoints.length > 0) {
+                        text += `   Key Points:\n`;
+                        segment.keyPoints.forEach(point => {
+                            text += `   • ${point}\n`;
+                        });
+                        text += '\n';
+                    }
+                    
+                    if (segment.assignedPeople && segment.assignedPeople.length > 0) {
+                        text += `   Assigned People:\n`;
+                        segment.assignedPeople.forEach(person => {
+                            text += `   • ${person.name} (${person.roles.join(', ')})\n`;
+                        });
+                        text += '\n';
+                    }
+                    
+                    text += '───────────────────────────────────────────────────────────\n\n';
+                });
+            }
+            
+            // Download
+            const blob = new Blob([text], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `podcast-planner-${episodeDetails.title || 'episode'}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function exportAsPDF() {
+            // Create a printable HTML document
+            let html = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Podcast Planner - ${episodeDetails.title || 'Episode'}</title>
+                    <style>
+                        @page { margin: 1.5cm; }
+                        body {
+                            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                            color: #333;
+                            line-height: 1.6;
+                            max-width: 800px;
+                            margin: 0 auto;
+                        }
+                        .header {
+                            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                            color: white;
+                            padding: 30px;
+                            text-align: center;
+                            border-radius: 10px;
+                            margin-bottom: 30px;
+                        }
+                        h1 { margin: 0 0 10px 0; font-size: 32px; }
+                        .subtitle { font-size: 14px; opacity: 0.9; }
+                        .info-box {
+                            background: #f8f9fa;
+                            padding: 20px;
+                            border-radius: 8px;
+                            margin-bottom: 20px;
+                            border-left: 4px solid #667eea;
+                        }
+                        .info-box h2 { margin-top: 0; color: #667eea; font-size: 18px; }
+                        .info-item { margin: 8px 0; }
+                        .info-label { font-weight: 600; color: #495057; }
+                        .summary {
+                            display: grid;
+                            grid-template-columns: 1fr 1fr;
+                            gap: 15px;
+                            margin-bottom: 30px;
+                        }
+                        .summary-box {
+                            background: #667eea;
+                            color: white;
+                            padding: 20px;
+                            border-radius: 8px;
+                            text-align: center;
+                        }
+                        .summary-label { font-size: 12px; opacity: 0.9; }
+                        .summary-value { font-size: 28px; font-weight: bold; margin-top: 5px; }
+                        .segment {
+                            background: white;
+                            border: 2px solid #dee2e6;
+                            border-radius: 10px;
+                            padding: 20px;
+                            margin-bottom: 20px;
+                            page-break-inside: avoid;
+                        }
+                        .segment-header {
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            margin-bottom: 15px;
+                            padding-bottom: 10px;
+                            border-bottom: 2px solid #667eea;
+                        }
+                        .segment-title { font-size: 20px; font-weight: bold; color: #495057; }
+                        .segment-time {
+                            background: #667eea;
+                            color: white;
+                            padding: 8px 16px;
+                            border-radius: 20px;
+                            font-weight: 600;
+                        }
+                        .segment-description { color: #6c757d; margin-bottom: 15px; }
+                        .key-points { margin: 15px 0; }
+                        .key-points h3 { font-size: 14px; color: #495057; margin-bottom: 8px; }
+                        .key-points ul { margin: 5px 0; padding-left: 25px; }
+                        .key-points li { margin: 5px 0; }
+                        .assigned-people { margin-top: 15px; }
+                        .assigned-people h3 { font-size: 14px; color: #495057; margin-bottom: 8px; }
+                        .person-badge {
+                            display: inline-block;
+                            padding: 6px 12px;
+                            border-radius: 6px;
+                            margin: 4px;
+                            font-size: 12px;
+                            font-weight: 600;
+                            color: white;
+                        }
+                        .footer {
+                            text-align: center;
+                            color: #6c757d;
+                            font-size: 12px;
+                            margin-top: 40px;
+                            padding-top: 20px;
+                            border-top: 1px solid #dee2e6;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <h1>🎙️ Podcast Planner</h1>
+                        <div class="subtitle">Episode Planning Document</div>
+                    </div>
+            `;
+            
+            // Episode Details - Always show
+            html += '<div class="info-box">';
+            html += '<h2>Episode Information</h2>';
+            html += `<div class="info-item"><span class="info-label">Title:</span> ${episodeDetails.title || 'Not specified'}</div>`;
+            html += `<div class="info-item"><span class="info-label">Episode Number:</span> ${episodeDetails.number || 'Not specified'}</div>`;
+            html += `<div class="info-item"><span class="info-label">Season:</span> ${episodeDetails.season || 'Not specified'}</div>`;
+            html += '</div>';
+            
+            // Summary
+            html += '<div class="summary">';
+            html += `<div class="summary-box">
+                        <div class="summary-label">Total Segments</div>
+                        <div class="summary-value">${segments.length}</div>
+                     </div>`;
+            html += `<div class="summary-box">
+                        <div class="summary-label">Total Runtime</div>
+                        <div class="summary-value">${segments.reduce((sum, s) => sum + s.time, 0)} min</div>
+                     </div>`;
+            html += '</div>';
+            
+            // Segments
+            if (segments.length > 0) {
+                html += '<h2 style="color: #667eea; margin-bottom: 20px;">Episode Segments</h2>';
+                segments.forEach((segment, index) => {
+                    html += `<div class="segment">`;
+                    html += `<div class="segment-header">`;
+                    html += `<div class="segment-title">${index + 1}. ${segment.title}</div>`;
+                    html += `<div class="segment-time">${segment.time} min</div>`;
+                    html += `</div>`;
+                    
+                    if (segment.description) {
+                        html += `<div class="segment-description">${segment.description}</div>`;
+                    }
+                    
+                    if (segment.keyPoints && segment.keyPoints.length > 0) {
+                        html += '<div class="key-points">';
+                        html += '<h3>Key Points:</h3>';
+                        html += '<ul>';
+                        segment.keyPoints.forEach(point => {
+                            html += `<li>${point}</li>`;
+                        });
+                        html += '</ul></div>';
+                    }
+                    
+                    if (segment.assignedPeople && segment.assignedPeople.length > 0) {
+                        html += '<div class="assigned-people">';
+                        html += '<h3>Assigned People:</h3>';
+                        segment.assignedPeople.forEach(person => {
+                            const color = person.color || '#667eea';
+                            html += `<span class="person-badge" style="background: ${color}">${person.name} (${person.roles.join(', ')})</span>`;
+                        });
+                        html += '</div>';
+                    }
+                    
+                    html += '</div>';
+                });
+            }
+            
+            html += `<div class="footer">Generated by Podcast Planner Tool on ${new Date().toLocaleDateString()}</div>`;
+            html += '</body></html>';
+            
+            // Open in new window and print
+            const printWindow = window.open('', '', 'width=800,height=600');
+            printWindow.document.write(html);
+            printWindow.document.close();
+            printWindow.focus();
+            
+            // Wait for content to load then print
+            setTimeout(() => {
+                printWindow.print();
+            }, 250);
+        }
+
+        // JSON Export/Import functionality
+        function exportAsJSON() {
+            const data = {
+                people,
+                segments,
+                episodeDetails,
+                exportDate: new Date().toISOString()
+            };
+            
+            const jsonString = JSON.stringify(data, null, 2);
+            const blob = new Blob([jsonString], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `podcast-planner-${episodeDetails.title || 'show'}-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function importFromJSON() {
+            document.getElementById('jsonFileInput').click();
+        }
+
+        function handleJSONImport(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    
+                    // Validate data structure
+                    if (!data.people || !data.segments || !data.episodeDetails) {
+                        alert('Invalid JSON file format. Please select a valid Podcast Planner export file.');
+                        return;
+                    }
+                    
+                    // Load the data
+                    people = data.people || [];
+                    segments = data.segments || [];
+                    episodeDetails = data.episodeDetails || { title: '', number: '', season: '' };
+                    
+                    // Update UI
+                    renderPeople();
+                    renderSegments();
+                    updateCalculator();
+                    loadEpisodeDetails();
+                    
+                    // Save to localStorage
+                    saveToCookies();
+                    
+                    alert('Show data imported successfully!');
+                } catch (error) {
+                    console.error('Error importing JSON:', error);
+                    alert('Error reading JSON file. Please make sure the file is valid.');
+                }
+            };
+            reader.readAsText(file);
+            
+            // Reset file input
+            event.target.value = '';
+        }
+
+        // Drag and Drop functionality
+        let draggedIndex = null;
+
+        function handleDragStart(event) {
+            draggedIndex = parseInt(event.currentTarget.dataset.index);
+            event.currentTarget.classList.add('dragging');
+            event.dataTransfer.effectAllowed = 'move';
+        }
+
+        function handleDragEnd(event) {
+            event.currentTarget.classList.remove('dragging');
+            // Remove drag-over class from all items
+            document.querySelectorAll('.segment-item').forEach(item => {
+                item.classList.remove('drag-over');
+            });
+        }
+
+        function handleDragOver(event) {
+            event.preventDefault();
+            event.dataTransfer.dropEffect = 'move';
+            const currentItem = event.currentTarget;
+            if (!currentItem.classList.contains('dragging')) {
+                currentItem.classList.add('drag-over');
+            }
+        }
+
+        function handleDragLeave(event) {
+            event.currentTarget.classList.remove('drag-over');
+        }
+
+        function handleDrop(event) {
+            event.preventDefault();
+            const dropIndex = parseInt(event.currentTarget.dataset.index);
+            
+            if (draggedIndex !== null && draggedIndex !== dropIndex) {
+                // Reorder the segments array
+                const draggedItem = segments[draggedIndex];
+                segments.splice(draggedIndex, 1);
+                segments.splice(dropIndex, 0, draggedItem);
+                
+                saveToCookies();
+                renderSegments();
+                updateCalculator();
+            }
+            
+            event.currentTarget.classList.remove('drag-over');
+        }
+
+        // Copy prompt functionality
+        function copyPrompt(promptId, feedbackId) {
+            const promptText = document.getElementById(promptId).textContent.trim();
+            
+            navigator.clipboard.writeText(promptText).then(() => {
+                // Show feedback
+                const feedback = document.getElementById(feedbackId);
+                feedback.classList.add('show');
+                
+                // Hide feedback after 2 seconds
+                setTimeout(() => {
+                    feedback.classList.remove('show');
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+                alert('Failed to copy prompt. Please try again.');
+            });
+        }
+    </script>
+</body>
+</html>
