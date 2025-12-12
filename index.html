@@ -23,6 +23,8 @@
             --border-color: #404040;
             --input-bg: #2d2d2d;
             --card-bg: #252525;
+            --primary-color-dark: var(--primary-color);
+            --secondary-color-dark: var(--secondary-color);
         }
 
         * {
@@ -1248,6 +1250,17 @@
             studiochannel84: { primary: '#00e887', secondary: '#ea00ff' }
         };
 
+        // Dark versions of color schemes (darker, muted versions)
+        const darkColorSchemes = {
+            purple: { primary: '#3d4a8a', secondary: '#4a2d61' },
+            blue: { primary: '#2e6a9e', secondary: '#006b7d' },
+            green: { primary: '#2a8a4d', secondary: '#22826e' },
+            orange: { primary: '#9a3d59', secondary: '#9a7d28' },
+            red: { primary: '#905c9b', secondary: '#923642' },
+            teal: { primary: '#2e6a9e', secondary: '#006b7d' },
+            studiochannel84: { primary: '#005b35', secondary: '#750080' }
+        };
+
         // Apply theme
         function applyTheme(theme) {
             if (theme === 'system') {
@@ -1258,6 +1271,8 @@
             } else {
                 document.body.classList.remove('dark-mode');
             }
+            // Reapply color scheme to use correct light/dark version
+            applyColorScheme(settings.colorScheme);
         }
 
         // Change theme
@@ -1275,9 +1290,13 @@
 
         // Apply color scheme
         function applyColorScheme(scheme) {
-            const colors = colorSchemes[scheme];
-            document.documentElement.style.setProperty('--primary-color', colors.primary);
-            document.documentElement.style.setProperty('--secondary-color', colors.secondary);
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            const colors = isDarkMode ? darkColorSchemes[scheme] : colorSchemes[scheme];
+            
+            if (colors) {
+                document.documentElement.style.setProperty('--primary-color', colors.primary);
+                document.documentElement.style.setProperty('--secondary-color', colors.secondary);
+            }
         }
 
         // Change color scheme
@@ -1870,6 +1889,11 @@
         }
 
         function exportAsPDF() {
+            // Get current color scheme
+            const colors = colorSchemes[settings.colorScheme] || colorSchemes.purple;
+            const primaryColor = colors.primary;
+            const secondaryColor = colors.secondary;
+            
             // Create a printable HTML document
             let html = `
                 <!DOCTYPE html>
@@ -1887,7 +1911,7 @@
                             margin: 0 auto;
                         }
                         .header {
-                            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                            background: linear-gradient(135deg, ${primaryColor} 0%, ${secondaryColor} 100%);
                             color: white;
                             padding: 30px;
                             text-align: center;
@@ -1901,9 +1925,9 @@
                             padding: 20px;
                             border-radius: 8px;
                             margin-bottom: 20px;
-                            border-left: 4px solid #667eea;
+                            border-left: 4px solid ${primaryColor};
                         }
-                        .info-box h2 { margin-top: 0; color: #667eea; font-size: 18px; }
+                        .info-box h2 { margin-top: 0; color: ${primaryColor}; font-size: 18px; }
                         .info-item { margin: 8px 0; }
                         .info-label { font-weight: 600; color: #495057; }
                         .summary {
@@ -1913,7 +1937,7 @@
                             margin-bottom: 30px;
                         }
                         .summary-box {
-                            background: #667eea;
+                            background: ${primaryColor};
                             color: white;
                             padding: 20px;
                             border-radius: 8px;
@@ -1935,11 +1959,11 @@
                             align-items: center;
                             margin-bottom: 15px;
                             padding-bottom: 10px;
-                            border-bottom: 2px solid #667eea;
+                            border-bottom: 2px solid ${primaryColor};
                         }
                         .segment-title { font-size: 20px; font-weight: bold; color: #495057; }
                         .segment-time {
-                            background: #667eea;
+                            background: ${primaryColor};
                             color: white;
                             padding: 8px 16px;
                             border-radius: 20px;
@@ -2072,6 +2096,11 @@
 
         // Export as JPG functionality
         function exportAsJPG() {
+            // Get current color scheme
+            const colors = colorSchemes[settings.colorScheme] || colorSchemes.purple;
+            const primaryColor = colors.primary;
+            const secondaryColor = colors.secondary;
+            
             // Create a container for export content
             const exportContainer = document.createElement('div');
             exportContainer.style.cssText = 'position: absolute; left: -9999px; top: 0; background: white; padding: 40px; font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;';
@@ -2079,13 +2108,13 @@
             // Build the export HTML
             let html = `
                 <div style="max-width: 1000px;">
-                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; border-radius: 10px; margin-bottom: 30px;">
+                    <div style="background: linear-gradient(135deg, ${primaryColor} 0%, ${secondaryColor} 100%); color: white; padding: 30px; text-align: center; border-radius: 10px; margin-bottom: 30px;">
                         <h1 style="font-size: 2.5em; margin: 0 0 10px 0;">🎙️ Podcast Planner</h1>
                         <p style="margin: 0; font-size: 1.1em;">Episode Planning Document</p>
                     </div>
                     
-                    <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #667eea;">
-                        <h2 style="margin-top: 0; color: #667eea; font-size: 1.5em;">Episode Information</h2>
+                    <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid ${primaryColor};">
+                        <h2 style="margin-top: 0; color: ${primaryColor}; font-size: 1.5em;">Episode Information</h2>
                         <div style="margin: 8px 0;"><strong style="color: #495057;">Title:</strong> ${episodeDetails.title || 'Not specified'}</div>
                         <div style="margin: 8px 0;"><strong style="color: #495057;">Episode Number:</strong> ${episodeDetails.number || 'Not specified'}</div>
                         <div style="margin: 8px 0;"><strong style="color: #495057;">Season:</strong> ${episodeDetails.season || 'Not specified'}</div>
@@ -2105,11 +2134,11 @@
             
             // People Involved
             if (people.length > 0) {
-                html += '<div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #667eea;">';
-                html += '<h2 style="margin-top: 0; color: #667eea; font-size: 1.5em;">People Involved</h2>';
+                html += '<div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid ' + primaryColor + ';">';
+                html += '<h2 style="margin-top: 0; color: ' + primaryColor + '; font-size: 1.5em;">People Involved</h2>';
                 html += '<div style="display: flex; flex-wrap: wrap; gap: 10px;">';
                 people.forEach(person => {
-                    const color = person.color || '#667eea';
+                    const color = person.color || primaryColor;
                     html += `<span style="display: inline-block; padding: 8px 16px; border-radius: 6px; background: ${color}; color: white; font-weight: 600; font-size: 14px;">${person.name} (${person.roles.join(', ')})</span>`;
                 });
                 html += '</div></div>';
@@ -2117,11 +2146,11 @@
             
             // Summary
             html += '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 30px;">';
-            html += `<div style="background: #667eea; color: white; padding: 20px; border-radius: 8px; text-align: center;">
+            html += `<div style="background: ${primaryColor}; color: white; padding: 20px; border-radius: 8px; text-align: center;">
                         <div style="font-size: 12px; opacity: 0.9;">Total Segments</div>
                         <div style="font-size: 2em; font-weight: bold; margin-top: 5px;">${segments.length}</div>
                      </div>`;
-            html += `<div style="background: #667eea; color: white; padding: 20px; border-radius: 8px; text-align: center;">
+            html += `<div style="background: ${primaryColor}; color: white; padding: 20px; border-radius: 8px; text-align: center;">
                         <div style="font-size: 12px; opacity: 0.9;">Total Runtime</div>
                         <div style="font-size: 2em; font-weight: bold; margin-top: 5px;">${segments.reduce((sum, s) => sum + s.time, 0)} min</div>
                      </div>`;
@@ -2129,12 +2158,12 @@
             
             // Segments
             if (segments.length > 0) {
-                html += '<h2 style="color: #667eea; margin-bottom: 20px; font-size: 1.5em;">Episode Segments</h2>';
+                html += '<h2 style="color: ' + primaryColor + '; margin-bottom: 20px; font-size: 1.5em;">Episode Segments</h2>';
                 segments.forEach((segment, index) => {
                     html += `<div style="background: white; border: 2px solid #dee2e6; border-radius: 10px; padding: 20px; margin-bottom: 20px;">`;
-                    html += `<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #667eea;">`;
+                    html += `<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid ${primaryColor};">`;
                     html += `<div style="font-size: 1.3em; font-weight: bold; color: #495057;">${index + 1}. ${segment.title}</div>`;
-                    html += `<div style="background: #667eea; color: white; padding: 8px 16px; border-radius: 20px; font-weight: 600;">${segment.time} min</div>`;
+                    html += `<div style="background: ${primaryColor}; color: white; padding: 8px 16px; border-radius: 20px; font-weight: 600;">${segment.time} min</div>`;
                     html += `</div>`;
                     
                     if (segment.description) {
