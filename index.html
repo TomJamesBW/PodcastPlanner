@@ -483,10 +483,9 @@
         }
 
         .segment-actions {
-            display: grid;
-            grid-template-columns: 1fr auto auto;
+            display: flex;
+            flex-direction: column;
             gap: 10px;
-            align-items: center;
         }
 
         .calculator-grid {
@@ -1086,11 +1085,13 @@
             <!-- Export Section -->
             <div class="section">
                 <h2>Export</h2>
-                <button class="btn btn-primary" onclick="exportAsPlainText()">📄 Export as Plain Text</button>
-                <button class="btn btn-primary" onclick="exportAsPDF()">📑 Export as PDF</button>
-                <button class="btn btn-primary" onclick="exportAsJPG()">🖼️ Export to JPG</button>
-                <button class="btn btn-primary" onclick="exportAsJSON()">💾 Export Show as JSON</button>
-                <button class="btn btn-primary" onclick="importFromJSON()">📂 Import Show as JSON</button>
+                <div style="display: flex; flex-direction: column; gap: 10px; max-width: 300px;">
+                    <button class="btn btn-primary" onclick="exportAsPlainText()" style="margin: 0; width: 100%;">📄 Export as Plain Text</button>
+                    <button class="btn btn-primary" onclick="exportAsPDF()" style="margin: 0; width: 100%;">📑 Export as PDF</button>
+                    <button class="btn btn-primary" onclick="exportAsJPG()" style="margin: 0; width: 100%;">🖼️ Export to JPG</button>
+                    <button class="btn btn-primary" onclick="exportAsJSON()" style="margin: 0; width: 100%;">💾 Export Show as JSON</button>
+                    <button class="btn btn-primary" onclick="importFromJSON()" style="margin: 0; width: 100%;">📂 Import Show as JSON</button>
+                </div>
                 <input type="file" id="jsonFileInput" accept=".json" style="display: none;" onchange="handleJSONImport(event)">
             </div>
         </div>
@@ -1248,7 +1249,7 @@
         </div>
     </div>
 
-    <div class="version">Version 1.6</div>
+    <div class="version">Version 1.65</div>
 
     <script>
         // Data storage
@@ -1836,25 +1837,29 @@
                         ` : ''}
                     </div>
                     <div class="segment-actions">
-                        <select id="person-select-${index}">
-                            <option value="-1">Select person to add...</option>
-                            <option value="-2">Add Everyone</option>
-                            ${people.map((person, personIndex) => `
-                                <option value="${personIndex}">${person.name} (${person.roles.join(', ')})</option>
-                            `).join('')}
-                        </select>
-                        <button class="btn btn-primary" onclick="assignPersonToSegment(${index})">Add Host / Guest</button>
-                        ${assets.length > 0 ? `
-                            <select id="asset-select-${index}" style="margin-top: 10px;">
-                                <option value="-1">Select asset to add...</option>
-                                <option value="-2">Add All</option>
-                                ${assets.map((asset, assetIndex) => `
-                                    <option value="${assetIndex}">${asset.name}</option>
+                        <div style="display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center;">
+                            <select id="person-select-${index}">
+                                <option value="-1">Select person to add...</option>
+                                <option value="-2">Add Everyone</option>
+                                ${people.map((person, personIndex) => `
+                                    <option value="${personIndex}">${person.name} (${person.roles.join(', ')})</option>
                                 `).join('')}
                             </select>
-                            <button class="btn btn-primary" onclick="assignAssetToSegment(${index})">Add Asset</button>
+                            <button class="btn btn-primary" onclick="assignPersonToSegment(${index})">Add Host / Guest</button>
+                        </div>
+                        ${assets.length > 0 ? `
+                            <div style="display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center;">
+                                <select id="asset-select-${index}">
+                                    <option value="-1">Select asset to add...</option>
+                                    <option value="-2">Add All</option>
+                                    ${assets.map((asset, assetIndex) => `
+                                        <option value="${assetIndex}">${asset.name}</option>
+                                    `).join('')}
+                                </select>
+                                <button class="btn btn-primary" onclick="assignAssetToSegment(${index})">Add Asset</button>
+                            </div>
                         ` : ''}
-                        <button class="btn btn-danger" onclick="removeSegment(${index})">Remove Segment</button>
+                        <button class="btn btn-danger" onclick="removeSegment(${index})" style="margin-top: 10px;">Remove Segment</button>
                     </div>
                 </div>
             `).join('');
