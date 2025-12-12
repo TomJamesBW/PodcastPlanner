@@ -66,7 +66,7 @@ A single-page web application for podcast hosts to plan and organize their episo
 - **Technologies**: HTML5, CSS3, Vanilla JavaScript
 - **Dependencies**: html2canvas (CDN for image export)
 - **File Size**: ~60KB single file
-- **Version**: 1.5
+- **Version**: 1.6
 
 ### Data Structure
 ```javascript
@@ -167,6 +167,11 @@ episodeDetails = {
 - Safe for sensitive planning information
 
 ## Version History
+
+### Version 1.6 (December 2025)
+- Fixed episode details alignment on Planner page (increased label width to 140px)
+- Added Studio:Channel84 custom color scheme (green to magenta gradient)
+- Fixed color scheme button functionality
 
 ### Version 1.5 (December 2025)
 - Added Recording Date field to episode details
