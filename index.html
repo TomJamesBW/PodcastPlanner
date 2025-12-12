@@ -795,6 +795,8 @@
                     <input type="number" id="estimatedTime" placeholder="Enter estimated time in minutes" min="1">
                 </div>
                 <button class="btn btn-primary" onclick="addSegment()">Add Segment</button>
+                
+                <div class="segment-list" id="addedSegmentsList" style="margin-top: 20px;"></div>
             </div>
 
             <!-- Clear Data Section -->
@@ -824,6 +826,12 @@
                         <span id="displayEpisodeSeason" style="color: #6c757d;">Not set</span>
                     </div>
                 </div>
+            </div>
+
+            <!-- People Involved Section -->
+            <div class="section">
+                <h2>People Involved</h2>
+                <div class="people-list" id="plannerPeopleList"></div>
             </div>
 
             <!-- Episode Calculator -->
@@ -980,6 +988,8 @@
             loadFromCookies();
             renderPeople();
             renderSegments();
+            renderAddedSegmentsList();
+            renderPlannerPeople();
             updateCalculator();
             loadEpisodeDetails();
         };
@@ -999,10 +1009,14 @@
                 }
             });
 
-            // Update segment list when switching to Planner tab
+            // Update displays when switching tabs
+            if (tabIndex === 0) {
+                renderAddedSegmentsList();
+            }
             if (tabIndex === 1) {
                 renderSegments();
                 updateCalculator();
+                renderPlannerPeople();
             }
         }
 
@@ -1049,6 +1063,7 @@
 
             saveToCookies();
             renderPeople();
+            renderPlannerPeople();
         }
 
         // Remove person
@@ -1056,6 +1071,7 @@
             people.splice(index, 1);
             saveToCookies();
             renderPeople();
+            renderPlannerPeople();
             renderSegments(); // Update segments display
         }
 
@@ -1171,6 +1187,7 @@
             updateCharCounter();
 
             saveToCookies();
+            renderAddedSegmentsList();
         }
 
         // Assign person to segment
@@ -1213,6 +1230,7 @@
                 segments.splice(index, 1);
                 saveToCookies();
                 renderSegments();
+                renderAddedSegmentsList();
                 updateCalculator();
             }
         }
@@ -1678,6 +1696,101 @@
             
             // Reset file input
             event.target.value = '';
+        }
+
+        // Render added segments list in Add Content section
+        function renderAddedSegmentsList() {
+            const container = document.getElementById('addedSegmentsList');
+            
+            if (segments.length === 0) {
+                container.innerHTML = '';
+                return;
+            }
+
+            let html = '<h3 style="color: #667eea; margin-bottom: 15px; font-size: 16px;">Added Segments:</h3>';
+            html += segments.map((segment, index) => `
+                <div class="person-item" style="margin-bottom: 10px; flex-direction: row; border-color: #667eea;">
+                    <div class="person-info" style="text-align: left; flex: 1;">
+                        <strong>${segment.title}</strong>
+                        <div style="color: #6c757d; font-size: 14px; margin-top: 5px;">${segment.time} minutes</div>
+                    </div>
+                    <div style="display: flex; gap: 5px;">
+                        <button class="btn btn-secondary btn-small" onclick="editSegment(${index})">Edit</button>
+                        <button class="btn btn-danger btn-small" onclick="removeSegment(${index})">Remove</button>
+                    </div>
+                </div>
+            `).join('');
+            
+            container.innerHTML = html;
+        }
+
+        // Render people list in Planner tab
+        function renderPlannerPeople() {
+            const container = document.getElementById('plannerPeopleList');
+            
+            if (people.length === 0) {
+                container.innerHTML = '<div class="empty-state"><p>No hosts, guests, or producers added yet</p></div>';
+                return;
+            }
+
+            container.innerHTML = people.map((person, index) => `
+                <div class="person-item" style="border-color: ${person.color || '#dee2e6'}">
+                    <div class="person-color-bar" style="background: ${person.color || '#667eea'}"></div>
+                    <div class="person-info">
+                        <strong>${person.name}</strong>
+                        <div class="person-badges">
+                            ${person.roles.map(role => `
+                                <span class="badge badge-custom" style="background: ${person.color || '#667eea'}">${role.charAt(0).toUpperCase() + role.slice(1)}</span>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Edit segment function
+        function editSegment(index) {
+            const segment = segments[index];
+            
+            // Populate form fields
+            document.getElementById('segmentTitle').value = segment.title;
+            document.getElementById('segmentDescription').value = segment.description;
+            document.getElementById('estimatedTime').value = segment.time;
+            updateCharCounter();
+            
+            // Populate key points
+            const container = document.getElementById('keyPointsContainer');
+            container.innerHTML = '';
+            
+            if (segment.keyPoints.length > 0) {
+                segment.keyPoints.forEach((point, idx) => {
+                    const isLast = idx === segment.keyPoints.length - 1;
+                    const div = document.createElement('div');
+                    div.className = 'key-point-item';
+                    div.innerHTML = `
+                        <input type="text" class="key-point-input" placeholder="Enter key point" value="${point}">
+                        <button class="btn ${isLast ? 'btn-primary' : 'btn-danger'} btn-small" onclick="${isLast ? 'addKeyPoint()' : 'removeKeyPoint(this)'}">${isLast ? 'Add' : 'Remove'}</button>
+                    `;
+                    container.appendChild(div);
+                });
+            } else {
+                container.innerHTML = `
+                    <div class="key-point-item">
+                        <input type="text" class="key-point-input" placeholder="Enter key point">
+                        <button class="btn btn-primary btn-small" onclick="addKeyPoint()">Add</button>
+                    </div>
+                `;
+            }
+            
+            // Remove the old segment
+            segments.splice(index, 1);
+            saveToCookies();
+            renderAddedSegmentsList();
+            
+            // Scroll to top of page
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            alert('Segment loaded for editing. Make your changes and click "Add Segment" to save.');
         }
 
         // Drag and Drop functionality
