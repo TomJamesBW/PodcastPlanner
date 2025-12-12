@@ -893,14 +893,14 @@
         </div>
 
         <div class="tabs">
-            <button class="tab active" onclick="switchTab(0)">+ Planner Details</button>
-            <button class="tab" onclick="switchTab(1)">Planner</button>
+            <button class="tab" onclick="switchTab(0)">+ Planner Details</button>
+            <button class="tab active" onclick="switchTab(1)">Planner</button>
             <button class="tab" onclick="switchTab(2)">Further Help</button>
             <button class="tab settings-tab" onclick="switchTab(3)">⚙️</button>
         </div>
 
         <!-- Tab 1: Planner Details -->
-        <div class="tab-content active">
+        <div class="tab-content">
             <!-- Podcast Episode Details -->
             <div class="section">
                 <h2>Podcast Episode Details</h2>
@@ -962,6 +962,25 @@
                 <div class="people-list" id="peopleList"></div>
             </div>
 
+            <!-- Add Assets Section -->
+            <div class="section">
+                <h2>Add Assets</h2>
+                <div class="form-group">
+                    <label for="assetName">Asset</label>
+                    <input type="text" id="assetName" placeholder="Enter asset name (e.g., microphone, camera, etc.)">
+                </div>
+                <div class="form-group">
+                    <label for="assetColor">Color</label>
+                    <div class="color-picker-group">
+                        <input type="color" id="assetColor" value="#43e97b">
+                        <span>Choose a color for this asset</span>
+                    </div>
+                </div>
+                <button class="btn btn-primary" onclick="addAsset()">Add Asset</button>
+                
+                <div class="people-list" id="assetsList"></div>
+            </div>
+
             <!-- Add Content Section -->
             <div class="section">
                 <h2>Add Content</h2>
@@ -995,13 +1014,15 @@
             <!-- Clear Data Section -->
             <div class="section">
                 <h2>Clear Data</h2>
+                <button class="btn btn-danger" onclick="clearEpisodeDetails()">Clear Episode Details</button>
                 <button class="btn btn-danger" onclick="clearPeople()">Clear Hosts / Guests</button>
+                <button class="btn btn-danger" onclick="clearAssets()">Clear Assets</button>
                 <button class="btn btn-danger" onclick="clearSegments()">Clear Segments</button>
             </div>
         </div>
 
         <!-- Tab 2: Planner -->
-        <div class="tab-content">
+        <div class="tab-content active">
             <!-- Podcast Episode Details Display -->
             <div class="section">
                 <h2>Podcast Episode Details</h2>
@@ -1033,6 +1054,12 @@
             <div class="section">
                 <h2>People Involved</h2>
                 <div class="people-list" id="plannerPeopleList"></div>
+            </div>
+
+            <!-- Assets Section -->
+            <div class="section">
+                <h2>Required Assets</h2>
+                <div class="people-list" id="plannerAssetsList"></div>
             </div>
 
             <!-- Episode Calculator -->
@@ -1226,6 +1253,7 @@
     <script>
         // Data storage
         let people = [];
+        let assets = [];
         let segments = [];
         let episodeDetails = {
             title: '',
@@ -1371,9 +1399,11 @@
             loadSettings();
             loadFromCookies();
             renderPeople();
+            renderAssets();
             renderSegments();
             renderAddedSegmentsList();
             renderPlannerPeople();
+            renderPlannerAssets();
             updateCalculator();
             loadEpisodeDetails();
         };
@@ -1487,6 +1517,59 @@
             `).join('');
         }
 
+        // Add asset
+        function addAsset() {
+            const name = document.getElementById('assetName').value.trim();
+            const color = document.getElementById('assetColor').value;
+
+            if (!name) {
+                alert('Please enter an asset name');
+                return;
+            }
+
+            assets.push({ name, color });
+            
+            console.log('Asset added:', { name, color });
+            console.log('Assets array now:', assets);
+            
+            // Clear form
+            document.getElementById('assetName').value = '';
+            document.getElementById('assetColor').value = '#43e97b';
+
+            saveToCookies();
+            renderAssets();
+            renderPlannerAssets();
+        }
+
+        // Remove asset
+        function removeAsset(index) {
+            assets.splice(index, 1);
+            saveToCookies();
+            renderAssets();
+            renderPlannerAssets();
+            renderSegments(); // Update segments display
+        }
+
+        // Render assets list
+        function renderAssets() {
+            const container = document.getElementById('assetsList');
+            
+            if (assets.length === 0) {
+                container.innerHTML = '<div class="empty-state"><p>No assets added yet</p></div>';
+                return;
+            }
+
+            container.innerHTML = assets.map((asset, index) => `
+                <div class="person-item" style="border-color: ${asset.color || '#dee2e6'}">
+                    <div class="person-color-bar" style="background: ${asset.color || '#43e97b'}"></div>
+                    <div class="person-info">
+                        <strong>${asset.name}</strong>
+                    </div>
+                    <button class="btn btn-danger btn-small" onclick="removeAsset(${index})">Remove</button>
+                </div>
+            `).join('');
+        }
+
         // Add key point
         function addKeyPoint() {
             const container = document.getElementById('keyPointsContainer');
@@ -1555,7 +1638,8 @@
                 description,
                 keyPoints,
                 time,
-                assignedPeople: []
+                assignedPeople: [],
+                assignedAssets: []
             });
 
             console.log('Segment added:', { title, description, keyPoints, time });
@@ -1624,6 +1708,58 @@
             renderSegments();
         }
 
+        // Assign asset to segment
+        function assignAssetToSegment(segmentIndex) {
+            if (assets.length === 0) {
+                alert('Please add assets first in the Planner Details tab');
+                return;
+            }
+
+            const select = document.getElementById(`asset-select-${segmentIndex}`);
+            const selectedIndex = parseInt(select.value);
+
+            if (selectedIndex === -1) {
+                return;
+            }
+
+            // Ensure assignedAssets array exists
+            if (!segments[segmentIndex].assignedAssets) {
+                segments[segmentIndex].assignedAssets = [];
+            }
+
+            // Handle "Add All" option
+            if (selectedIndex === -2) {
+                assets.forEach(asset => {
+                    // Check if asset is already assigned
+                    if (!segments[segmentIndex].assignedAssets.some(a => a.name === asset.name)) {
+                        segments[segmentIndex].assignedAssets.push(asset);
+                    }
+                });
+                saveToCookies();
+                renderSegments();
+                return;
+            }
+
+            const asset = assets[selectedIndex];
+            
+            // Check if asset is already assigned
+            if (segments[segmentIndex].assignedAssets.some(a => a.name === asset.name)) {
+                alert('This asset is already assigned to this segment');
+                return;
+            }
+
+            segments[segmentIndex].assignedAssets.push(asset);
+            saveToCookies();
+            renderSegments();
+        }
+
+        // Remove asset from segment
+        function removeAssetFromSegment(segmentIndex, assetIndex) {
+            segments[segmentIndex].assignedAssets.splice(assetIndex, 1);
+            saveToCookies();
+            renderSegments();
+        }
+
         // Remove segment
         function removeSegment(index) {
             if (confirm('Are you sure you want to remove this segment?')) {
@@ -1685,6 +1821,19 @@
                                 </div>
                             `).join('') : '<em style="color: #6c757d;">No one assigned yet</em>'}
                         </div>
+                        ${(segment.assignedAssets && segment.assignedAssets.length > 0) || assets.length > 0 ? `
+                            <div style="margin-top: 12px;">
+                                <strong>Assets:</strong>
+                                <div class="segment-assets-list" style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px;">
+                                    ${segment.assignedAssets && segment.assignedAssets.length > 0 ? segment.assignedAssets.map((asset, assetIndex) => `
+                                        <div class="asset-pill" style="background: ${asset.color || '#43e97b'}; color: white; padding: 6px 12px; border-radius: 20px; display: inline-flex; align-items: center; gap: 8px; font-size: 14px;">
+                                            ${asset.name}
+                                            <button class="btn-pill-remove" onclick="removeAssetFromSegment(${index}, ${assetIndex})" style="background: rgba(255,255,255,0.2); border: none; color: white; width: 18px; height: 18px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; font-size: 12px;">×</button>
+                                        </div>
+                                    `).join('') : '<em style="color: #6c757d;">No assets assigned</em>'}
+                                </div>
+                            </div>
+                        ` : ''}
                     </div>
                     <div class="segment-actions">
                         <select id="person-select-${index}">
@@ -1695,6 +1844,16 @@
                             `).join('')}
                         </select>
                         <button class="btn btn-primary" onclick="assignPersonToSegment(${index})">Add Host / Guest</button>
+                        ${assets.length > 0 ? `
+                            <select id="asset-select-${index}" style="margin-top: 10px;">
+                                <option value="-1">Select asset to add...</option>
+                                <option value="-2">Add All</option>
+                                ${assets.map((asset, assetIndex) => `
+                                    <option value="${assetIndex}">${asset.name}</option>
+                                `).join('')}
+                            </select>
+                            <button class="btn btn-primary" onclick="assignAssetToSegment(${index})">Add Asset</button>
+                        ` : ''}
                         <button class="btn btn-danger" onclick="removeSegment(${index})">Remove Segment</button>
                     </div>
                 </div>
@@ -1711,12 +1870,36 @@
         }
 
         // Clear people
+        function clearEpisodeDetails() {
+            if (confirm('Are you sure you want to clear all episode details?')) {
+                episodeDetails = {
+                    title: '',
+                    number: '',
+                    season: '',
+                    recordingDate: '',
+                    airDate: ''
+                };
+                saveToCookies();
+                loadEpisodeDetails();
+            }
+        }
+
         function clearPeople() {
             if (confirm('Are you sure you want to clear all hosts, guests, and producers?')) {
                 people = [];
                 saveToCookies();
                 renderPeople();
                 renderSegments(); // Update segments to remove assigned people
+            }
+        }
+
+        // Clear assets
+        function clearAssets() {
+            if (confirm('Are you sure you want to clear all assets?')) {
+                assets = [];
+                saveToCookies();
+                renderAssets();
+                renderSegments(); // Update segments to remove assigned assets
             }
         }
 
@@ -1775,6 +1958,7 @@
         function saveToCookies() {
             const data = {
                 people,
+                assets,
                 segments,
                 episodeDetails
             };
@@ -1792,6 +1976,7 @@
                 if (dataString) {
                     const data = JSON.parse(dataString);
                     people = data.people || [];
+                    assets = data.assets || [];
                     segments = data.segments || [];
                     episodeDetails = data.episodeDetails || { title: '', number: '', season: '', recordingDate: '', airDate: '' };
                     console.log('Data loaded successfully:', data);
@@ -1835,6 +2020,16 @@
                 text += '\n';
             }
             
+            // Assets
+            if (assets.length > 0) {
+                text += 'ASSETS:\n';
+                text += '───────────────────────────────────────────────────────────\n';
+                assets.forEach(asset => {
+                    text += `• ${asset.name}\n`;
+                });
+                text += '\n';
+            }
+            
             // Summary
             text += 'EPISODE SUMMARY:\n';
             text += '───────────────────────────────────────────────────────────\n';
@@ -1868,6 +2063,14 @@
                         text += `   Assigned People:\n`;
                         segment.assignedPeople.forEach(person => {
                             text += `   • ${person.name} (${person.roles.join(', ')})\n`;
+                        });
+                        text += '\n';
+                    }
+                    
+                    if (segment.assignedAssets && segment.assignedAssets.length > 0) {
+                        text += `   Assets:\n`;
+                        segment.assignedAssets.forEach(asset => {
+                            text += `   • ${asset.name}\n`;
                         });
                         text += '\n';
                     }
@@ -2029,6 +2232,17 @@
                 html += '</div>';
             }
             
+            // Assets
+            if (assets.length > 0) {
+                html += '<div class="info-box">';
+                html += '<h2>Assets</h2>';
+                assets.forEach(asset => {
+                    const color = asset.color || '#43e97b';
+                    html += `<span class="person-badge" style="background: ${color}">${asset.name}</span>`;
+                });
+                html += '</div>';
+            }
+            
             // Summary
             html += '<div class="summary">';
             html += `<div class="summary-box">
@@ -2071,6 +2285,16 @@
                         segment.assignedPeople.forEach(person => {
                             const color = person.color || '#667eea';
                             html += `<span class="person-badge" style="background: ${color}">${person.name} (${person.roles.join(', ')})</span>`;
+                        });
+                        html += '</div>';
+                    }
+                    
+                    if (segment.assignedAssets && segment.assignedAssets.length > 0) {
+                        html += '<div class="assigned-people">';
+                        html += '<h3>Assets:</h3>';
+                        segment.assignedAssets.forEach(asset => {
+                            const color = asset.color || '#43e97b';
+                            html += `<span class="person-badge" style="background: ${color}">${asset.name}</span>`;
                         });
                         html += '</div>';
                     }
@@ -2144,6 +2368,18 @@
                 html += '</div></div>';
             }
             
+            // Assets
+            if (assets.length > 0) {
+                html += '<div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid ' + primaryColor + ';">';
+                html += '<h2 style="margin-top: 0; color: ' + primaryColor + '; font-size: 1.5em;">Assets</h2>';
+                html += '<div style="display: flex; flex-wrap: wrap; gap: 10px;">';
+                assets.forEach(asset => {
+                    const color = asset.color || '#43e97b';
+                    html += `<span style="display: inline-block; padding: 8px 16px; border-radius: 6px; background: ${color}; color: white; font-weight: 600; font-size: 14px;">${asset.name}</span>`;
+                });
+                html += '</div></div>';
+            }
+            
             // Summary
             html += '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 30px;">';
             html += `<div style="background: ${primaryColor}; color: white; padding: 20px; border-radius: 8px; text-align: center;">
@@ -2191,6 +2427,17 @@
                         html += '</div></div>';
                     }
                     
+                    if (segment.assignedAssets && segment.assignedAssets.length > 0) {
+                        html += '<div style="margin-top: 15px;">';
+                        html += '<h3 style="font-size: 14px; color: #495057; margin-bottom: 8px;">Assets:</h3>';
+                        html += '<div style="display: flex; flex-wrap: wrap; gap: 8px;">';
+                        segment.assignedAssets.forEach(asset => {
+                            const color = asset.color || '#43e97b';
+                            html += `<span style="display: inline-block; padding: 6px 12px; border-radius: 20px; background: ${color}; color: white; font-weight: 600; font-size: 12px;">${asset.name}</span>`;
+                        });
+                        html += '</div></div>';
+                    }
+                    
                     html += '</div>';
                 });
             }
@@ -2233,6 +2480,7 @@
         function exportAsJSON() {
             const data = {
                 people,
+                assets,
                 segments,
                 episodeDetails,
                 exportDate: new Date().toISOString()
@@ -2271,11 +2519,13 @@
                     
                     // Load the data
                     people = data.people || [];
+                    assets = data.assets || [];
                     segments = data.segments || [];
                     episodeDetails = data.episodeDetails || { title: '', number: '', season: '' };
                     
                     // Update UI
                     renderPeople();
+                    renderAssets();
                     renderSegments();
                     updateCalculator();
                     loadEpisodeDetails();
@@ -2340,6 +2590,25 @@
                                 <span class="badge badge-custom" style="background: ${person.color || '#667eea'}">${role.charAt(0).toUpperCase() + role.slice(1)}</span>
                             `).join('')}
                         </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Render planner assets list
+        function renderPlannerAssets() {
+            const container = document.getElementById('plannerAssetsList');
+            
+            if (assets.length === 0) {
+                container.innerHTML = '<div class="empty-state"><p>No assets added yet</p></div>';
+                return;
+            }
+
+            container.innerHTML = assets.map((asset, index) => `
+                <div class="person-item" style="border-color: ${asset.color || '#dee2e6'}">
+                    <div class="person-color-bar" style="background: ${asset.color || '#43e97b'}"></div>
+                    <div class="person-info">
+                        <strong>${asset.name}</strong>
                     </div>
                 </div>
             `).join('');

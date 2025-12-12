@@ -13,8 +13,9 @@ A single-page web application for podcast hosts to plan and organize their episo
 
 ### Episode Planning
 - Add and manage hosts, guests, and producers with custom color coding
+- Add and manage assets (equipment, locations, etc.) with custom color coding
 - Create episode segments with titles, descriptions, key points, and time estimates
-- Assign people to specific segments
+- Assign people and assets to specific segments
 - Drag-and-drop segment reordering
 - Real-time episode calculator (total segments and runtime)
 
@@ -39,11 +40,25 @@ A single-page web application for podcast hosts to plan and organize their episo
 5. Switch to the **Planner** tab to review and organize your episode
 6. Export your completed plan using the export buttons
 
+### Managing Episode Details
+- Enter episode title, number, and season in the Planner Details tab
+- Set recording date and air date using date pickers
+- Details automatically appear on the Planner tab
+- Clear all episode details using the Clear Episode Details button
+
 ### Managing People
 - Click "Add Host", "Add Guest", or "Add Producer"
 - Enter name and select a color (optional)
 - People appear in both tabs for easy reference
 - Remove people by clicking the red Remove button on their card
+
+### Managing Assets
+- Enter asset name (e.g., microphone, camera, studio location)
+- Select a color for visual identification
+- Assets appear in both tabs as "Required Assets"
+- Assign assets to segments in the **Planner** tab
+- Assets display as colored pills in segment details
+- Clear all assets using the Clear Assets button
 
 ### Managing Segments
 - Fill in segment details (title, description, time)
@@ -54,10 +69,10 @@ A single-page web application for podcast hosts to plan and organize their episo
 - Reorder segments by dragging them up or down
 
 ### Exporting
-- **Plain Text (.txt)**: Simple formatted text document
-- **PDF**: Print-ready formatted document
-- **JPG Image**: High-resolution image export of your episode plan
-- **JSON**: Machine-readable format for backup/sharing
+- **Plain Text (.txt)**: Simple formatted text document (includes people and assets)
+- **PDF**: Print-ready formatted document (includes people and assets)
+- **JPG Image**: High-resolution image export of your episode plan (includes people and assets)
+- **JSON**: Machine-readable format for backup/sharing (includes all data)
 
 ## Technical Specifications
 
@@ -65,8 +80,8 @@ A single-page web application for podcast hosts to plan and organize their episo
 - **Type**: Single-Page Application (SPA)
 - **Technologies**: HTML5, CSS3, Vanilla JavaScript
 - **Dependencies**: html2canvas (CDN for image export)
-- **File Size**: ~60KB single file
-- **Version**: 1.6
+- **File Size**: ~65KB single file
+- **Version**: 1.65
 
 ### Data Structure
 ```javascript
@@ -77,20 +92,29 @@ people = [{
   color: String (hex)
 }]
 
+// Assets array
+assets = [{
+  name: String,
+  color: String (hex)
+}]
+
 // Segments array
 segments = [{
   title: String,
   description: String,
   time: Number (minutes),
   keyPoints: Array<String>,
-  assignedPeople: Array<Person>
+  assignedPeople: Array<Person>,
+  assignedAssets: Array<Asset>
 }]
 
 // Episode details object
 episodeDetails = {
   title: String,
   number: String,
-  season: String
+  season: String,
+  recordingDate: String,
+  airDate: String
 }
 ```
 
@@ -168,10 +192,22 @@ episodeDetails = {
 
 ## Version History
 
+### Version 1.65 (December 2025)
+- Added Assets feature with color coding
+- Assets section added between People and Content in Planner Details tab
+- Assets displayed on Planner tab as "Required Assets"
+- Assets assigned to segments as colored pills
+- Clear Assets button added
+- Clear Episode Details button added
+- Assets included in all export formats (TXT, PDF, JPG, JSON)
+- Assets persisted in localStorage
+
 ### Version 1.6 (December 2025)
 - Fixed episode details alignment on Planner page (increased label width to 140px)
 - Added Studio:Channel84 custom color scheme (green to magenta gradient)
 - Fixed color scheme button functionality
+- Dark mode now darkens gradient colors for better aesthetics
+- Dark color schemes automatically applied when in dark mode
 
 ### Version 1.5 (December 2025)
 - Added Recording Date field to episode details
