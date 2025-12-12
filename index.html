@@ -1071,7 +1071,7 @@
         </div>
     </div>
 
-    <div class="version">Version 1.2</div>
+    <div class="version">Version 1.3</div>
 
     <script>
         // Data storage
@@ -1323,6 +1323,19 @@
                 return;
             }
 
+            // Handle "Add Everyone" option
+            if (selectedIndex === -2) {
+                people.forEach(person => {
+                    // Check if person is already assigned
+                    if (!segments[segmentIndex].assignedPeople.some(p => p.name === person.name)) {
+                        segments[segmentIndex].assignedPeople.push(person);
+                    }
+                });
+                saveToCookies();
+                renderSegments();
+                return;
+            }
+
             const person = people[selectedIndex];
             
             // Check if person is already assigned
@@ -1408,6 +1421,7 @@
                     <div class="segment-actions">
                         <select id="person-select-${index}">
                             <option value="-1">Select person to add...</option>
+                            <option value="-2">Add Everyone</option>
                             ${people.map((person, personIndex) => `
                                 <option value="${personIndex}">${person.name} (${person.roles.join(', ')})</option>
                             `).join('')}

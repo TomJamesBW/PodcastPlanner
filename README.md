@@ -66,7 +66,7 @@ A single-page web application for podcast hosts to plan and organize their episo
 - **Technologies**: HTML5, CSS3, Vanilla JavaScript
 - **Dependencies**: html2canvas (CDN for image export)
 - **File Size**: ~60KB single file
-- **Version**: 1.2
+- **Version**: 1.3
 
 ### Data Structure
 ```javascript
@@ -167,6 +167,11 @@ episodeDetails = {
 - Safe for sensitive planning information
 
 ## Version History
+
+### Version 1.3 (December 2025)
+- Added "Add Everyone" option to person assignment dropdown
+- One-click assignment of all people to a segment
+- Automatically prevents duplicate assignments when adding everyone
 
 ### Version 1.2 (December 2025)
 - Added JPG image export functionality
