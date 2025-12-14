@@ -283,9 +283,15 @@ This helps you stay on track during recording!
 
 ### Navigation
 
+Three buttons help you move through segments:
+
 - **← Previous**: Save current notes and go to the previous segment
+- **Next →**: Move to the next segment WITHOUT saving (quick preview)
 - **Save & Next →**: Save current notes and move to the next segment
   - On the last segment, this changes to just **Save**
+
+**Tip**: Use "Next" to quickly preview upcoming segments without committing your current work. Use "Save & Next" when you're done with a segment.
+
 - The timer resets to 00:00:00 when you move between segments
 - All recording data is saved automatically
 

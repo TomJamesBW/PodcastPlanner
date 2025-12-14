@@ -224,6 +224,14 @@ episodeDetails = {
 
 ## Version History
 
+### Version 1.76 (December 2025)
+- **Go Live Navigation Improvements**:
+- Added "Next" button for navigating segments without saving
+- Button layout now: Previous | Next | Save & Next
+- Next button allows quick segment preview without committing changes
+- Fixed Previous and Next buttons to reset timer without confirmation dialog
+- Timer resets smoothly when navigating between segments
+
 ### Version 1.75 (December 2025)
 - **Mobile Support Added**: App now works on mobile devices
 - Mobile warning changed to "not ideal" with Continue Anyway button

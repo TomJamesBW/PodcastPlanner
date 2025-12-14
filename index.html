@@ -1459,6 +1459,7 @@
                     </div>
                     <div style="display: flex; gap: 10px; margin-top: 20px;">
                         <button class="btn btn-primary" onclick="previousSegment()" id="prevSegmentBtn">← Previous</button>
+                        <button class="btn btn-primary" onclick="nextSegment()" id="nextSegmentBtnPlain">Next →</button>
                         <button class="btn btn-primary" onclick="saveAndNextSegment()" id="nextSegmentBtn">Save & Next →</button>
                     </div>
                 </div>
@@ -1661,7 +1662,7 @@
         </div>
     </div>
 
-    <div class="version">Version 1.75</div>
+    <div class="version">Version 1.76</div>
 
     <script>
         // Data storage
@@ -2518,6 +2519,7 @@
             
             // Update button states
             document.getElementById('prevSegmentBtn').disabled = currentSegmentIndex === 0;
+            document.getElementById('nextSegmentBtnPlain').disabled = currentSegmentIndex === segments.length - 1;
             document.getElementById('nextSegmentBtn').textContent = currentSegmentIndex === segments.length - 1 ? 'Save' : 'Save & Next →';
         }
 
@@ -2525,7 +2527,21 @@
             if (currentSegmentIndex > 0) {
                 saveCurrentSegmentData();
                 currentSegmentIndex--;
-                resetTimer();
+                // Just pause and reset timer display without confirmation
+                pauseTimer();
+                timerSeconds = 0;
+                updateTimerDisplay();
+                displayCurrentSegment();
+            }
+        }
+
+        function nextSegment() {
+            if (currentSegmentIndex < segments.length - 1) {
+                currentSegmentIndex++;
+                // Just pause and reset timer display without confirmation
+                pauseTimer();
+                timerSeconds = 0;
+                updateTimerDisplay();
                 displayCurrentSegment();
             }
         }
