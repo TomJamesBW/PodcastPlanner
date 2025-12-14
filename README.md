@@ -19,6 +19,15 @@ A single-page web application for podcast hosts to plan and organize their episo
 - Drag-and-drop segment reordering
 - Real-time episode calculator (total segments and runtime)
 
+### Live Recording (Go Live)
+- Real-time timer with start, stop, and reset controls
+- Track recording time for each segment
+- Add recording notes for each segment
+- View estimated vs actual recording times
+- Navigate between segments with Previous/Save & Next
+- Auto-save recording data and notes
+- Export recording logs with all timing data
+
 ### Data Management
 - Automatic local storage persistence
 - Export episode plans as TXT, PDF, or JSON
@@ -68,11 +77,23 @@ A single-page web application for podcast hosts to plan and organize their episo
 - Assign people to segments in the **Planner** tab
 - Reorder segments by dragging them up or down
 
+### Go Live Recording
+- Switch to the **Go Live** tab when ready to record
+- View current segment details, key points, and assigned people/assets
+- Start timer when beginning a segment
+- Stop timer when pausing or completing
+- Add recording notes specific to each segment
+- Use Previous/Save & Next to navigate between segments
+- Timer auto-resets when moving to a new segment
+- View real-time statistics: estimated time, total time, segments recorded
+- Export recording logs with all timing and notes data
+
 ### Exporting
 - **Plain Text (.txt)**: Simple formatted text document (includes people and assets)
 - **PDF**: Print-ready formatted document (includes people and assets)
 - **JPG Image**: High-resolution image export of your episode plan (includes people and assets)
 - **JSON**: Machine-readable format for backup/sharing (includes all data)
+- **Recording Log (.txt)**: Detailed recording session with times and notes (Go Live tab)
 
 ## Technical Specifications
 
@@ -80,8 +101,8 @@ A single-page web application for podcast hosts to plan and organize their episo
 - **Type**: Single-Page Application (SPA)
 - **Technologies**: HTML5, CSS3, Vanilla JavaScript
 - **Dependencies**: html2canvas (CDN for image export)
-- **File Size**: ~65KB single file
-- **Version**: 1.66
+- **File Size**: ~75KB single file
+- **Version**: 1.70
 
 ### Data Structure
 ```javascript
@@ -105,7 +126,10 @@ segments = [{
   time: Number (minutes),
   keyPoints: Array<String>,
   assignedPeople: Array<Person>,
-  assignedAssets: Array<Asset>
+  assignedAssets: Array<Asset>,
+  recordingNotes: String,
+  recordedTime: Number (seconds),
+  isRecorded: Boolean
 }]
 
 // Episode details object
@@ -191,6 +215,31 @@ episodeDetails = {
 - Safe for sensitive planning information
 
 ## Version History
+
+### Version 1.70 (December 2025)
+- **Major Feature**: Added "Go Live" recording tab
+- Real-time timer with start, pause, stop, and reset functionality
+  - **Start**: Begin or resume timer
+  - **Pause**: Temporarily pause without saving
+  - **Stop**: Pause and save recorded time to segment
+  - **Reset**: Clear timer and segment recorded time (requires confirmation)
+- Track actual recording time for each segment
+- Add recording notes for each segment
+- Navigate segments with Previous/Save & Next buttons
+- Timer auto-resets when moving between segments
+- Live statistics: estimated time, total recorded time, segments recorded/left
+  - Segments Recorded and Segments Left boxes centrally aligned below Total Time
+  - Estimated Time and Total Segments boxes vertically and horizontally centered
+- Display current segment details including people, assets, key points
+- **Recorded Time Field Color Coding**:
+  - Light green with dark border when under estimated time
+  - Light red with dark border when over estimated time
+  - Light yellow with dark border when within 10% of estimated time
+  - Default gray when no time recorded
+- Export recording logs with notes and timing data
+- Recording data persisted in localStorage
+- Updated segment data structure to include recording information
+- JSON import now refreshes all tab displays immediately
 
 ### Version 1.66 (December 2025)
 - Changed default tab to Planner (instead of Planner Details)

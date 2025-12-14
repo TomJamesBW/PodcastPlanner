@@ -1,0 +1,413 @@
+# Podcast Planner - User Guide
+
+**Live Site**: https://podcastplanner.channel84.co.uk
+
+---
+
+## Welcome to Podcast Planner!
+
+Podcast Planner is a free, easy-to-use tool that helps you plan, organize, and record your podcast episodes. Everything runs in your browser and your data stays on your device - no account needed!
+
+**Important**: This tool requires a tablet or larger screen. Phones are not supported due to screen size limitations.
+
+---
+
+## Quick Start Guide
+
+### First Time Setup (5 minutes)
+
+1. **Open the app** in your web browser
+2. **Set your preferences** (optional):
+   - Click the **Settings** tab at the top
+   - Choose your theme (Light, Dark, or System)
+   - Pick your favorite color scheme
+   - Your choices are saved automatically
+
+3. **Start planning your first episode**:
+   - The app opens on the **Planner** tab by default
+   - Click **Planner Details** to begin entering information
+
+---
+
+## Tab 1: Planner Details
+
+This is where you set up all the information for your episode.
+
+### Episode Information
+
+1. **Basic Details**:
+   - **Episode Title**: Give your episode a name (e.g., "Interview with Jane Smith")
+   - **Episode Number**: Enter the episode number (e.g., "42")
+   - **Season**: Enter the season number if applicable (e.g., "2")
+   - **Recording Date**: Click the calendar icon to select when you'll record
+   - **Air Date**: Click the calendar icon to select when the episode will publish
+
+2. **Clear Episode Details**:
+   - Use the "Clear Episode Details" button to reset all episode information
+   - This won't delete your segments, people, or assets
+
+### People Involved
+
+Add everyone who will be part of your episode:
+
+1. **Add a Host**:
+   - Click the **Add Host** button
+   - Enter the host's name
+   - (Optional) Click the color box to choose a color for them
+   - Click **Add Host**
+   - The host appears as a colored card below
+
+2. **Add Guests** (same process):
+   - Click **Add Guest**
+   - Enter name and pick a color
+   - Click **Add Guest**
+
+3. **Add Producers** (same process):
+   - Click **Add Producer**
+   - Enter name and pick a color
+   - Click **Add Producer**
+
+4. **Remove Someone**:
+   - Click the red **Remove** button on their card
+   - This will also remove them from any segments they're assigned to
+
+### Required Assets
+
+Assets are things you need for the recording (equipment, locations, props, etc.):
+
+1. **Add an Asset**:
+   - Enter the asset name (e.g., "Studio Microphone", "Green Room", "Product Sample")
+   - Click the color box to choose a color
+   - Click **Add Asset**
+   - The asset appears as a colored pill below
+
+2. **Remove an Asset**:
+   - Click the **×** on the asset pill
+   - This will also remove it from any segments it's assigned to
+
+3. **Clear All Assets**:
+   - Use the "Clear All Assets" button to remove everything at once
+
+### Add Content (Segments)
+
+Segments are the building blocks of your episode. Each segment is a distinct part of your show.
+
+1. **Create a Segment**:
+   - **Segment Title**: Name the segment (e.g., "Introduction", "Main Interview", "Sponsor Read")
+   - **Description**: Write what happens in this segment (optional but recommended)
+   - **Estimated Time**: Enter how many minutes you expect this segment to last
+   - **Key Points**: 
+     - Type a key point or topic to cover
+     - Click **Add** to add it to the list
+     - Add as many key points as you need
+     - Click **×** next to any key point to remove it
+   - Click **Add Segment** when done
+
+2. **View Your Segments**:
+   - All segments appear in a list below the form
+   - Each shows: title, time, key points, and buttons
+
+3. **Edit a Segment**:
+   - Click the blue **Edit** button on any segment
+   - The segment loads into the form above
+   - Make your changes
+   - Click **Update Segment** to save
+
+4. **Remove a Segment**:
+   - Click the red **Remove** button on any segment
+   - It will be deleted immediately (no undo!)
+
+---
+
+## Tab 2: Planner
+
+This tab shows your complete episode plan in one view.
+
+### Episode Overview
+
+At the top, you'll see:
+- Episode title, number, and season
+- Recording date and air date
+- **Total Segments**: How many segments you've created
+- **Total Episode Runtime**: Sum of all segment times
+
+### People Involved
+
+- All hosts, guests, and producers appear here as colored cards
+- This is just for reference - add/remove people in the **Planner Details** tab
+
+### Required Assets
+
+- All your assets appear here as colored pills
+- This is just for reference - add/remove assets in the **Planner Details** tab
+
+### Segments
+
+This is where you organize and finalize your episode:
+
+1. **View Segments**:
+   - Each segment shows in a colored box
+   - You can see: title, description, time, key points, people, and assets
+
+2. **Assign People to a Segment**:
+   - Click the **Assign Person** dropdown
+   - Select a person from the list
+   - OR select **Add Everyone** to assign all people at once
+   - Assigned people appear as colored pills below
+   - Click the **×** on a pill to unassign someone
+
+3. **Assign Assets to a Segment**:
+   - Click the **Assign Asset** dropdown
+   - Select an asset from the list
+   - Assigned assets appear as colored pills below
+   - Click the **×** on a pill to unassign an asset
+
+4. **Reorder Segments**:
+   - Click and hold the **≡** (hamburger icon) on the left side of a segment
+   - Drag the segment up or down
+   - Release to drop it in the new position
+   - The order updates automatically
+
+5. **Collapse/Expand Segments**:
+   - Click **Collapse All** to minimize all segments (shows only title and time)
+   - Click **Expand All** to maximize all segments (shows all details)
+   - This helps when you have many segments and want to focus
+
+6. **Remove a Segment**:
+   - Click the red **Remove** button on any segment
+   - It will be deleted immediately
+
+### Export Your Plan
+
+Once your episode is planned, you can export it:
+
+1. **Export as Plain Text (.txt)**:
+   - Creates a simple text file with all episode details
+   - Great for sharing with team members or keeping notes
+
+2. **Export as PDF**:
+   - Opens a print dialog
+   - Choose "Save as PDF" from your printer options
+   - Creates a professional-looking document
+
+3. **Export as JPG Image**:
+   - Creates a high-quality image of your plan
+   - Perfect for sharing on social media or in presentations
+
+4. **Export as JSON**:
+   - Saves all your data in a file you can import later
+   - Use this to back up your episode plan
+
+### Import a Plan
+
+1. Click **Import from JSON**
+2. Select a JSON file you previously exported
+3. The episode data loads immediately
+4. All tabs update to show the imported information
+
+### Clear All Data
+
+- Use the **Clear All Data** button to completely reset the app
+- This deletes everything: episode details, people, assets, and segments
+- You'll be asked to confirm before deletion
+- This cannot be undone!
+
+---
+
+## Tab 3: Go Live
+
+Use this tab when you're ready to record your episode.
+
+### Timings Overview
+
+At the top, you'll see real-time statistics:
+
+- **Estimated Time**: Total planned time from all segments
+- **Total Time**: Actual recorded time so far
+- **Total Segments**: Number of segments in your episode
+- **Segments Recorded**: How many you've completed (green box)
+- **Segments Left**: How many remain (red box)
+
+### Timer
+
+The timer tracks how long you spend on each segment:
+
+1. **Start**: Click to begin timing (or resume after pausing)
+2. **Pause**: Click to pause temporarily without saving the time
+3. **Stop**: Click to pause AND save the recorded time to the current segment
+4. **Reset**: Click to clear the timer and remove recorded time from the segment (asks for confirmation)
+
+The timer displays in **HH:MM:SS** format (hours:minutes:seconds).
+
+### Current Segment Display
+
+While recording, you'll see:
+- Segment number (e.g., "Segment 1 of 5")
+- Segment title
+- Estimated time in minutes
+- Description (if you added one)
+- Key points to cover (if you added any)
+- Assigned people (if any)
+- Assigned assets (if any)
+
+### Recording Notes
+
+- Type notes about what happened during this segment
+- Examples: "Great energy", "Need to re-record intro", "Went off-topic at 5:30"
+- Notes save automatically when you move to the next segment
+
+### Recorded Time
+
+This field shows the time you recorded for the current segment:
+
+- **Gray background**: No time recorded yet
+- **Light green with dark border**: Recorded time is under the estimated time ✓
+- **Light yellow with dark border**: Recorded time is within 10% of estimated time ≈
+- **Light red with dark border**: Recorded time is over the estimated time ⚠
+
+This helps you stay on track during recording!
+
+### Navigation
+
+- **← Previous**: Save current notes and go to the previous segment
+- **Save & Next →**: Save current notes and move to the next segment
+  - On the last segment, this changes to just **Save**
+- The timer resets to 00:00:00 when you move between segments
+- All recording data is saved automatically
+
+### Export Recording Log
+
+After your recording session, export a detailed log:
+
+- **Export as Plain Text (.txt)**: Complete recording log with all times and notes
+- Includes all the same export options as the Planner tab
+
+---
+
+## Tab 4: Settings
+
+Customize the look and feel of Podcast Planner:
+
+### Theme
+
+Choose how the app looks:
+- **Light**: Bright white background (good for daytime use)
+- **Dark**: Dark background (easier on the eyes in low light)
+- **System**: Automatically matches your device's theme
+
+### Color Scheme
+
+Pick your favorite gradient color scheme:
+- Purple (default)
+- Blue
+- Green
+- Orange  
+- Red
+- Teal
+- Studio:Channel84 (custom green to magenta)
+
+Changes apply instantly - no need to save!
+
+---
+
+## Tab 5: Further Help
+
+This tab provides resources for getting the most out of Podcast Planner:
+
+### AI-Powered Assistance
+
+Get help planning your episode with AI:
+
+1. **Pre-written Prompts**: Five ready-to-use prompts for:
+   - Generating episode ideas
+   - Creating segment structures
+   - Writing show notes
+   - Planning interview questions
+   - Optimizing episode flow
+
+2. **How to Use**:
+   - Click **Copy** next to any prompt
+   - Open your favorite AI tool (buttons provided for ChatGPT, Copilot, Gemini)
+   - Paste the prompt and customize it for your episode
+   - Use the AI's suggestions in your planning
+
+---
+
+## Tips for Success
+
+### Planning Your First Episode
+
+1. **Start Simple**: Don't worry about getting everything perfect
+2. **Add People First**: Set up your hosts and guests before creating segments
+3. **Break It Down**: Divide your episode into 3-7 segments for good structure
+4. **Estimate Generously**: Add a few extra minutes to each segment estimate
+5. **Use Key Points**: They help you stay on track during recording
+
+### During Recording
+
+1. **Review Segments First**: Before starting, look through all your segments in the Go Live tab
+2. **Use the Timer**: Start it when you begin each segment, stop it when you finish
+3. **Take Notes**: Write down anything unusual or important that happens
+4. **Don't Stress Over Time**: The color coding helps, but natural conversation matters more
+5. **Save As You Go**: The app auto-saves, but use "Save & Next" between segments
+
+### Best Practices
+
+1. **Back Up Your Work**: Export to JSON after planning each episode
+2. **Use Assets Wisely**: Track physical items you need, special locations, or important props
+3. **Assign People Early**: Knowing who's in each segment helps with preparation
+4. **Color Code Consistently**: Use similar colors for similar roles across episodes
+5. **Review Your Stats**: After recording, check your actual time vs. estimated time to improve future planning
+
+---
+
+## Troubleshooting
+
+### My data disappeared
+- Check if you accidentally clicked "Clear All Data"
+- Data is stored in your browser - clearing browser data will delete everything
+- Always export to JSON to back up important episodes
+
+### Can't drag segments
+- Make sure you're clicking and holding the **≡** icon (not the segment itself)
+- Try using a mouse instead of a trackpad
+- Refresh the page if the drag feature stops working
+
+### Exports not working
+- **PDF**: Use the print dialog to save as PDF
+- **JPG**: Make sure the page has fully loaded before exporting
+- **JSON**: Check that your browser allows file downloads
+
+### Timer issues
+- If the timer doesn't start, refresh the page
+- Make sure you clicked "Start" (not just "Pause")
+- The timer only saves when you click "Stop" (not "Pause")
+
+### Something else not working?
+- Try refreshing the page
+- Clear your browser cache
+- Try a different browser
+- Make sure you're on a tablet or larger device
+
+---
+
+## Privacy & Data
+
+- **All Local**: Your data never leaves your device
+- **No Account**: No sign-up, login, or personal information required
+- **No Tracking**: We don't track your usage or collect analytics
+- **Your Data**: You own everything you create
+- **Offline**: Works without an internet connection (after the first load)
+
+---
+
+## Getting Help
+
+Need more assistance?
+
+- Email: tj@channel84.co.uk
+- Subject line: "Podcast Planner Help"
+
+---
+
+**Ready to plan your next great episode? Let's go!**
