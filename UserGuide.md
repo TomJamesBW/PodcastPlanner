@@ -8,7 +8,18 @@
 
 Podcast Planner is a free, easy-to-use tool that helps you plan, organize, and record your podcast episodes. Everything runs in your browser and your data stays on your device - no account needed!
 
-**Important**: This tool requires a tablet or larger screen. Phones are not supported due to screen size limitations.
+**Important**: While this tool now works on mobile devices, **it's optimized for tablets and larger screens**. Mobile phones will show a warning when you first open the app, but you can click "Continue Anyway" if you need to use it on a phone.
+
+### Using on Mobile Devices
+
+If you're using a phone:
+- You'll see a warning screen when you first open the app
+- Click **Continue Anyway** to proceed (your choice is saved)
+- The interface is optimized for touch with larger buttons
+- Layouts automatically stack vertically for easier scrolling
+- **Use collapsible sections** (click the +/- icons next to section titles) to reduce scrolling
+- Some features like drag-and-drop may be less convenient on small screens
+- **We strongly recommend using a tablet or desktop for the best experience**
 
 ---
 
@@ -17,6 +28,7 @@ Podcast Planner is a free, easy-to-use tool that helps you plan, organize, and r
 ### First Time Setup (5 minutes)
 
 1. **Open the app** in your web browser
+   - On mobile: Dismiss the warning if needed by clicking "Continue Anyway"
 2. **Set your preferences** (optional):
    - Click the **Settings** tab at the top
    - Choose your theme (Light, Dark, or System)
@@ -32,6 +44,8 @@ Podcast Planner is a free, easy-to-use tool that helps you plan, organize, and r
 ## Tab 1: Planner Details
 
 This is where you set up all the information for your episode.
+
+**💡 Tip**: On mobile or to reduce scrolling, click the **−** (minus) icon next to any section title to collapse it. Click **+** (plus) to expand it again.
 
 ### Episode Information
 
@@ -358,6 +372,15 @@ Get help planning your episode with AI:
 3. **Assign People Early**: Knowing who's in each segment helps with preparation
 4. **Color Code Consistently**: Use similar colors for similar roles across episodes
 5. **Review Your Stats**: After recording, check your actual time vs. estimated time to improve future planning
+6. **Collapse Sections**: Use the +/- icons to collapse sections you're not currently using - especially helpful on mobile devices
+
+### Mobile-Specific Tips
+
+1. **Collapse Unused Sections**: Tap the − icon next to section titles to minimize scrolling
+2. **Use Portrait Mode**: The app works better in portrait orientation on phones
+3. **Zoom if Needed**: Pinch to zoom on specific areas if text is too small
+4. **Save Frequently**: Mobile browsers can reload pages unexpectedly - export to JSON often
+5. **Consider Using Desktop**: For complex episodes with many segments, a larger screen makes planning easier
 
 ---
 
@@ -371,7 +394,13 @@ Get help planning your episode with AI:
 ### Can't drag segments
 - Make sure you're clicking and holding the **≡** icon (not the segment itself)
 - Try using a mouse instead of a trackpad
+- On mobile: Drag-and-drop may not work well - consider using a desktop
 - Refresh the page if the drag feature stops working
+
+### Mobile warning keeps appearing
+- Click "Continue Anyway" to dismiss it
+- Your choice is saved and won't show again unless you clear browser data
+- The warning appears because the app works best on larger screens
 
 ### Exports not working
 - **PDF**: Use the print dialog to save as PDF
@@ -383,11 +412,16 @@ Get help planning your episode with AI:
 - Make sure you clicked "Start" (not just "Pause")
 - The timer only saves when you click "Stop" (not "Pause")
 
+### Sections won't collapse/expand
+- Make sure you're clicking on the section header (not inside the content)
+- Look for the +/− icon on the left side of section titles
+- Refresh the page if the feature stops working
+
 ### Something else not working?
 - Try refreshing the page
 - Clear your browser cache
 - Try a different browser
-- Make sure you're on a tablet or larger device
+- If using mobile, try a tablet or desktop for better experience
 
 ---
 

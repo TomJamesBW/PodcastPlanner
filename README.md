@@ -5,7 +5,7 @@ A single-page web application for podcast hosts to plan and organize their episo
 ## Requirements
 
 - Modern web browser (Chrome, Firefox, Safari, Edge)
-- **Tablet or larger screen required** - phones are blocked due to resolution limitations
+- **Tablet or larger screen recommended** - mobile devices supported but not ideal due to complexity
 - No installation required - runs directly from HTML file
 - No internet connection needed (fully offline capable)
 
@@ -38,6 +38,13 @@ A single-page web application for podcast hosts to plan and organize their episo
 - Five pre-written prompts for podcast planning assistance
 - Quick access buttons for ChatGPT, GitHub Copilot, and Google Gemini
 - One-click prompt copying to clipboard
+
+### Mobile Support
+- Mobile-responsive design with optimized layouts
+- Warning screen with option to continue anyway
+- Touch-friendly button sizes and spacing
+- Collapsible sections to reduce scrolling
+- Note: Desktop/tablet recommended for best experience
 
 ## Instructions for Use
 
@@ -190,8 +197,9 @@ episodeDetails = {
 - **Design System**: Custom CSS with CSS variables
 - **Colors**: Purple gradient theme (#667eea to #764ba2)
 - **Layout**: Flexbox and CSS Grid
-- **Responsive**: Adapts to container width
+- **Responsive**: Mobile-optimized with @media queries (768px breakpoint)
 - **Typography**: System font stack (Segoe UI, etc.)
+- **Collapsible Sections**: Click +/- on any section header to collapse/expand
 
 ### JavaScript Features
 - ES6+ syntax (arrow functions, template literals, spread operator)
@@ -215,6 +223,20 @@ episodeDetails = {
 - Safe for sensitive planning information
 
 ## Version History
+
+### Version 1.75 (December 2025)
+- **Mobile Support Added**: App now works on mobile devices
+- Mobile warning changed to "not ideal" with Continue Anyway button
+- Warning dismissal saved in localStorage
+- Comprehensive mobile-responsive CSS with media queries
+- Touch-friendly button sizes (44px+ minimum)
+- Single-column layouts on mobile devices
+- Optimized forms, grids, and navigation for small screens
+- **Collapsible Sections**: All sections now have +/- toggle functionality
+- Click any section header to collapse/expand content
+- Improves navigation and reduces scrolling on all devices
+- Collapsible sections work across all 5 tabs
+- Clear Assets bug fixed - now updates both tabs immediately
 
 ### Version 1.70 (December 2025)
 - **Major Feature**: Added "Go Live" recording tab
