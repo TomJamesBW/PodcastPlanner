@@ -2655,6 +2655,16 @@
 
         function nextSegment() {
             if (currentSegmentIndex < segments.length - 1) {
+                // Check if notes have been entered but not saved
+                const notesBox = document.getElementById('recordingNotes');
+                const notes = notesBox ? notesBox.value.trim() : '';
+                const segment = segments[currentSegmentIndex];
+                const savedNotes = segment && segment.recordingNotes ? segment.recordingNotes.trim() : '';
+                if (notes && notes !== savedNotes) {
+                    if (!confirm('You have entered notes for this segment that have not been saved.\nIf you continue, your notes will be lost.\n\nTo save your notes, click Save & Next instead.\n\nAre you sure you want to continue without saving?')) {
+                        return;
+                    }
+                }
                 currentSegmentIndex++;
                 // Just pause and reset timer display without confirmation
                 pauseTimer();
