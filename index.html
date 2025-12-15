@@ -2676,10 +2676,13 @@
 
         function saveAndNextSegment() {
             saveCurrentSegmentData();
-            
+            alert('Notes and recorded time saved.');
             if (currentSegmentIndex < segments.length - 1) {
                 currentSegmentIndex++;
-                resetTimer();
+                // Reset timer without confirmation dialog
+                pauseTimer();
+                timerSeconds = 0;
+                updateTimerDisplay();
                 displayCurrentSegment();
             }
         }
