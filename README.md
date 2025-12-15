@@ -224,6 +224,14 @@ episodeDetails = {
 
 ## Version History
 
+### Version 1.78 (December 2025)
+- **Improved PDF Export**: Enhanced PDF export functionality
+- Opens in new tab/page instead of automatic print dialog
+- Print button in top right corner for manual print/save
+- Full webkit color support ensures all colors display correctly
+- Uses browser's native print-to-PDF capability
+- No external libraries required
+
 ### Version 1.77 (December 2025)
 - **Custom Color Scheme**: Create your own gradient color scheme
 - Select two colors using color pickers to create custom gradient

@@ -200,9 +200,11 @@ Once your episode is planned, you can export it:
    - Great for sharing with team members or keeping notes
 
 2. **Export as PDF**:
-   - Opens a print dialog
-   - Choose "Save as PDF" from your printer options
-   - Creates a professional-looking document
+   - Opens a new tab with your formatted document
+   - Click the **Print / Save as PDF** button in the top right
+   - Your browser's print dialog opens with full color support
+   - Choose "Save as PDF" to download or print directly
+   - Creates a professional-looking document with your color scheme
 
 3. **Export as JPG Image**:
    - Creates a high-quality image of your plan
@@ -454,6 +456,13 @@ Get help planning your episode with AI:
 ---
 
 ## Version History
+
+### Version 1.78 (December 2025)
+- **Improved PDF Export**: Enhanced PDF export with better user control
+- Opens PDF preview in new tab instead of automatic print
+- Print button in top right corner (🖨️ Print / Save as PDF)
+- Full webkit support ensures colors print correctly
+- Users can review document before printing or saving
 
 ### Version 1.77 (December 2025)
 - **Custom Color Scheme**: Create your own gradient color scheme with two custom colors

@@ -1721,7 +1721,7 @@
         </div>
     </div>
 
-    <div class="version">Version 1.77</div>
+    <div class="version">Version 1.78</div>
 
     <script>
         // Data storage
@@ -3001,10 +3001,16 @@
         }
 
         function exportAsPDF() {
-            // Get current color scheme
-            const colors = colorSchemes[settings.colorScheme] || colorSchemes.purple;
-            const primaryColor = colors.primary;
-            const secondaryColor = colors.secondary;
+            // Get current color scheme (handle custom colors)
+            let primaryColor, secondaryColor;
+            if (settings.colorScheme === 'custom' && settings.customColor1 && settings.customColor2) {
+                primaryColor = settings.customColor1;
+                secondaryColor = settings.customColor2;
+            } else {
+                const colors = colorSchemes[settings.colorScheme] || colorSchemes.purple;
+                primaryColor = colors.primary;
+                secondaryColor = colors.secondary;
+            }
             
             // Create a printable HTML document
             let html = `
@@ -3014,16 +3020,50 @@
                     <meta charset="UTF-8">
                     <title>Podcast Planner - ${episodeDetails.title || 'Episode'}</title>
                     <style>
-                        @page { margin: 1.5cm; }
+                        * {
+                            -webkit-print-color-adjust: exact !important;
+                            print-color-adjust: exact !important;
+                            color-adjust: exact !important;
+                        }
+                        @page { 
+                            margin: 1.5cm; 
+                        }
                         body {
-                            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
                             color: #333;
                             line-height: 1.6;
                             max-width: 800px;
                             margin: 0 auto;
+                            padding: 20px;
+                        }
+                        .print-button {
+                            position: fixed;
+                            top: 20px;
+                            right: 20px;
+                            background: linear-gradient(135deg, ${primaryColor} 0%, ${secondaryColor} 100%);
+                            color: white;
+                            border: none;
+                            padding: 12px 24px;
+                            border-radius: 8px;
+                            font-size: 16px;
+                            font-weight: 600;
+                            cursor: pointer;
+                            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                            z-index: 1000;
+                            transition: transform 0.2s;
+                        }
+                        .print-button:hover {
+                            transform: translateY(-2px);
+                            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+                        }
+                        @media print {
+                            .print-button {
+                                display: none;
+                            }
                         }
                         .header {
                             background: linear-gradient(135deg, ${primaryColor} 0%, ${secondaryColor} 100%);
+                            -webkit-print-color-adjust: exact;
                             color: white;
                             padding: 30px;
                             text-align: center;
@@ -3034,6 +3074,7 @@
                         .subtitle { font-size: 14px; opacity: 0.9; }
                         .info-box {
                             background: #f8f9fa;
+                            -webkit-print-color-adjust: exact;
                             padding: 20px;
                             border-radius: 8px;
                             margin-bottom: 20px;
@@ -3050,6 +3091,7 @@
                         }
                         .summary-box {
                             background: ${primaryColor};
+                            -webkit-print-color-adjust: exact;
                             color: white;
                             padding: 20px;
                             border-radius: 8px;
@@ -3064,6 +3106,7 @@
                             padding: 20px;
                             margin-bottom: 20px;
                             page-break-inside: avoid;
+                            -webkit-print-color-adjust: exact;
                         }
                         .segment-header {
                             display: flex;
@@ -3076,6 +3119,7 @@
                         .segment-title { font-size: 20px; font-weight: bold; color: #495057; }
                         .segment-time {
                             background: ${primaryColor};
+                            -webkit-print-color-adjust: exact;
                             color: white;
                             padding: 8px 16px;
                             border-radius: 20px;
@@ -3096,6 +3140,7 @@
                             font-size: 12px;
                             font-weight: 600;
                             color: white;
+                            -webkit-print-color-adjust: exact;
                         }
                         .footer {
                             text-align: center;
@@ -3108,6 +3153,7 @@
                     </style>
                 </head>
                 <body>
+                    <button class="print-button" onclick="window.print()">🖨️ Print / Save as PDF</button>
                     <div class="header">
                         <h1>🎙️ Podcast Planner</h1>
                         <div class="subtitle">Episode Planning Document</div>
@@ -3227,16 +3273,10 @@
             html += `<div class="footer">Generated by Podcast Planner Tool on ${new Date().toLocaleDateString()}</div>`;
             html += '</body></html>';
             
-            // Open in new window and print
-            const printWindow = window.open('', '', 'width=800,height=600');
+            // Open in new tab with print button
+            const printWindow = window.open('', '_blank');
             printWindow.document.write(html);
             printWindow.document.close();
-            printWindow.focus();
-            
-            // Wait for content to load then print
-            setTimeout(() => {
-                printWindow.print();
-            }, 250);
         }
 
         // Export as JPG functionality
