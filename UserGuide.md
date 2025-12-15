@@ -325,6 +325,18 @@ Pick your favorite gradient color scheme:
 - Red
 - Teal
 - Studio:Channel84 (custom green to magenta)
+- **Custom**: Create your own gradient with two colors of your choice
+
+#### Creating a Custom Color Scheme
+
+1. **Select Custom**: Click the **Custom Gradient** button
+2. **Color Picker Opens**: Two color selectors appear below
+3. **Choose Colors**:
+   - **Start Color**: Pick the first color of your gradient
+   - **End Color**: Pick the second color of your gradient
+4. **Preview**: Watch the gradient update in real-time as you select colors
+5. **Apply**: Click **Apply Custom Gradient** to save your colors
+6. **Saved Automatically**: Your custom colors persist across sessions
 
 Changes apply instantly - no need to save!
 
@@ -438,6 +450,27 @@ Get help planning your episode with AI:
 - **No Tracking**: We don't track your usage or collect analytics
 - **Your Data**: You own everything you create
 - **Offline**: Works without an internet connection (after the first load)
+
+---
+
+## Version History
+
+### Version 1.77 (December 2025)
+- **Custom Color Scheme**: Create your own gradient color scheme with two custom colors
+- Color pickers for start and end colors
+- Real-time gradient preview
+- Custom colors saved to settings and persist across sessions
+
+### Version 1.76 (December 2025)
+- **Go Live Navigation Improvements**: Added "Next" button for segment navigation without saving
+- Button layout: Previous | Next | Save & Next
+- Fixed timer reset behavior on navigation (no more confirmation dialogs)
+
+### Version 1.75 (December 2025)
+- **Mobile Support**: App now works on mobile devices with responsive design
+- Mobile warning with "Continue Anyway" option
+- Touch-friendly buttons and layouts
+- **Collapsible Sections**: All sections can be collapsed/expanded with +/− icons
 
 ---
 

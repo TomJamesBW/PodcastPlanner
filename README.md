@@ -224,6 +224,13 @@ episodeDetails = {
 
 ## Version History
 
+### Version 1.77 (December 2025)
+- **Custom Color Scheme**: Create your own gradient color scheme
+- Select two colors using color pickers to create custom gradient
+- Custom colors saved to settings and persist across sessions
+- Preview your custom gradient before applying
+- Complements existing 7 preset color schemes
+
 ### Version 1.76 (December 2025)
 - **Go Live Navigation Improvements**:
 - Added "Next" button for navigating segments without saving

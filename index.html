@@ -1487,6 +1487,21 @@
 
         <!-- Tab 4: Further Help -->
         <div class="tab-content">
+            <!-- User Guide Section -->
+            <div class="section">
+                <div class="section-header" onclick="toggleSection('user-guide-content')">
+                    <span class="section-toggle" id="user-guide-content-toggle">−</span>
+                    <h2 style="margin: 0;">User Guide</h2>
+                </div>
+                <div class="section-content" id="user-guide-content">
+                <p style="margin-bottom: 30px; line-height: 1.6;">
+                    Need help getting started or using a specific feature? Check out our comprehensive 
+                    <a href="https://github.com/TomJamesBW/PodcastPlanner/blob/main/UserGuide.md" target="_blank" style="color: var(--primary-color); text-decoration: underline;">User Guide</a> 
+                    for step-by-step instructions and tips.
+                </p>
+                </div>
+            </div>
+
             <!-- Useful Prompts Section -->
             <div class="section">
                 <div class="section-header" onclick="toggleSection('prompts-content')">
@@ -1597,20 +1612,6 @@
         <!-- Tab 5: Settings -->
         <div class="tab-content">
             <div class="section">
-                <div class="section-header" onclick="toggleSection('user-guide-content')">
-                    <span class="section-toggle" id="user-guide-content-toggle">−</span>
-                    <h2 style="margin: 0;">User Guide</h2>
-                </div>
-                <div class="section-content" id="user-guide-content">
-                <p style="margin-bottom: 30px; line-height: 1.6;">
-                    Need help getting started or using a specific feature? Check out our comprehensive 
-                    <a href="https://github.com/TomJamesBW/PodcastPlanner/blob/main/UserGuide.md" target="_blank" style="color: var(--primary-color); text-decoration: underline;">User Guide</a> 
-                    for step-by-step instructions and tips.
-                </p>
-                </div>
-            </div>
-
-            <div class="section">
                 <div class="section-header" onclick="toggleSection('site-colouring-content')">
                     <span class="section-toggle" id="site-colouring-content-toggle">−</span>
                     <h2 style="margin: 0;">Site Colouring</h2>
@@ -1655,14 +1656,72 @@
                             Studio:Channel84 Gradient
                             <div class="color-preview" style="background: linear-gradient(135deg, #00e887 0%, #ea00ff 100%);"></div>
                         </button>
+                        <button class="color-btn" data-color="custom" onclick="changeColorScheme('custom')">
+                            Custom Gradient
+                            <div class="color-preview" id="customColorPreview" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
+                        </button>
                     </div>
                 </div>
+
+                <!-- Custom Color Picker -->
+                <div id="customColorPicker" style="display: none; margin-top: 20px; padding: 20px; background: #f8f9fa; border-radius: 8px;">
+                    <h4 style="margin: 0 0 15px 0;">Create Your Custom Gradient</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div>
+                            <label style="display: block; margin-bottom: 8px; font-weight: 600;">Start Color</label>
+                            <input type="color" id="customColor1" value="#667eea" onchange="updateCustomGradient()" style="width: 100%; height: 50px; border: 2px solid #dee2e6; border-radius: 8px; cursor: pointer;">
+                        </div>
+                        <div>
+                            <label style="display: block; margin-bottom: 8px; font-weight: 600;">End Color</label>
+                            <input type="color" id="customColor2" value="#764ba2" onchange="updateCustomGradient()" style="width: 100%; height: 50px; border: 2px solid #dee2e6; border-radius: 8px; cursor: pointer;">
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="applyCustomGradient()" style="margin-top: 15px; width: 100%;">Apply Custom Gradient</button>
+                </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header" onclick="toggleSection('storage-usage-content')">
+                    <span class="section-toggle" id="storage-usage-content-toggle">−</span>
+                    <h2 style="margin: 0;">Storage & Data Management</h2>
+                </div>
+                <div class="section-content" id="storage-usage-content">
+                    <p style="color: #6c757d; margin-bottom: 15px;">Your data is stored locally in your browser. Here's how much space you're using:</p>
+                    <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid var(--primary-color); margin-bottom: 20px;">
+                        <div style="margin-bottom: 10px;">
+                            <strong>Total Storage Used:</strong> <span id="storageSize" style="color: var(--primary-color); font-size: 18px; font-weight: bold;">Calculating...</span>
+                        </div>
+                        <div style="font-size: 14px; color: #6c757d;">
+                            <strong>Breakdown:</strong>
+                            <ul style="margin: 10px 0; padding-left: 20px;">
+                                <li>Episode Details: <span id="episodeDetailsSize">-</span></li>
+                                <li>People: <span id="peopleSize">-</span></li>
+                                <li>Assets: <span id="assetsSize">-</span></li>
+                                <li>Segments: <span id="segmentsSize">-</span></li>
+                                <li>Settings: <span id="settingsSize">-</span></li>
+                            </ul>
+                        </div>
+                        <button class="btn btn-primary" onclick="calculateStorageUsage()" style="margin-top: 10px;">↻ Refresh Storage Info</button>
+                    </div>
+                    
+                    <div style="background: #fff3cd; padding: 20px; border-radius: 8px; border-left: 4px solid #dc3545;">
+                        <h3 style="margin: 0 0 10px 0; color: #721c24;">⚠️ Reset Application</h3>
+                        <p style="color: #856404; margin-bottom: 15px;">
+                            This will completely reset Podcast Planner by clearing all your data from localStorage. 
+                            <strong>This action cannot be undone!</strong>
+                        </p>
+                        <p style="color: #856404; margin-bottom: 15px;">
+                            Before resetting, make sure to export your current episode as JSON if you want to keep a backup.
+                        </p>
+                        <button class="btn btn-danger" onclick="resetPodcastPlanner()" style="font-weight: bold;">🗑️ Reset Podcast Planner</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="version">Version 1.76</div>
+    <div class="version">Version 1.77</div>
 
     <script>
         // Data storage
@@ -1753,18 +1812,63 @@
 
         // Apply color scheme
         function applyColorScheme(scheme) {
-            const isDarkMode = document.body.classList.contains('dark-mode');
-            const colors = isDarkMode ? darkColorSchemes[scheme] : colorSchemes[scheme];
-            
-            if (colors) {
-                document.documentElement.style.setProperty('--primary-color', colors.primary);
-                document.documentElement.style.setProperty('--secondary-color', colors.secondary);
+            if (scheme === 'custom' && settings.customColor1 && settings.customColor2) {
+                // Use custom colors
+                document.documentElement.style.setProperty('--primary-color', settings.customColor1);
+                document.documentElement.style.setProperty('--secondary-color', settings.customColor2);
+            } else {
+                const isDarkMode = document.body.classList.contains('dark-mode');
+                const colors = isDarkMode ? darkColorSchemes[scheme] : colorSchemes[scheme];
+                
+                if (colors) {
+                    document.documentElement.style.setProperty('--primary-color', colors.primary);
+                    document.documentElement.style.setProperty('--secondary-color', colors.secondary);
+                }
             }
+        }
+
+        // Update custom gradient preview
+        function updateCustomGradient() {
+            const color1 = document.getElementById('customColor1').value;
+            const color2 = document.getElementById('customColor2').value;
+            const preview = document.getElementById('customColorPreview');
+            preview.style.background = `linear-gradient(135deg, ${color1} 0%, ${color2} 100%)`;
+        }
+
+        // Apply custom gradient
+        function applyCustomGradient() {
+            const color1 = document.getElementById('customColor1').value;
+            const color2 = document.getElementById('customColor2').value;
+            
+            // Save to settings
+            settings.customColor1 = color1;
+            settings.customColor2 = color2;
+            
+            // Apply the colors
+            applyColorScheme('custom');
+            saveSettings();
+            
+            alert('Custom gradient applied successfully!');
         }
 
         // Change color scheme
         function changeColorScheme(scheme) {
             settings.colorScheme = scheme;
+            
+            // Show/hide custom color picker
+            const customColorPicker = document.getElementById('customColorPicker');
+            if (scheme === 'custom') {
+                customColorPicker.style.display = 'block';
+                // Load saved custom colors if available
+                if (settings.customColor1 && settings.customColor2) {
+                    document.getElementById('customColor1').value = settings.customColor1;
+                    document.getElementById('customColor2').value = settings.customColor2;
+                    updateCustomGradient();
+                }
+            } else {
+                customColorPicker.style.display = 'none';
+            }
+            
             applyColorScheme(scheme);
             
             // Update active button
@@ -1800,6 +1904,19 @@
                     document.querySelectorAll('.color-btn').forEach(btn => {
                         btn.classList.toggle('active', btn.dataset.color === settings.colorScheme);
                     });
+                    
+                    // Show custom color picker if custom scheme is selected
+                    if (settings.colorScheme === 'custom') {
+                        const customColorPicker = document.getElementById('customColorPicker');
+                        if (customColorPicker) {
+                            customColorPicker.style.display = 'block';
+                            if (settings.customColor1 && settings.customColor2) {
+                                document.getElementById('customColor1').value = settings.customColor1;
+                                document.getElementById('customColor2').value = settings.customColor2;
+                                updateCustomGradient();
+                            }
+                        }
+                    }
                 }
             } catch (e) {
                 console.error('Error loading settings:', e);
@@ -1841,6 +1958,7 @@
             renderPlannerAssets();
             updateCalculator();
             loadEpisodeDetails();
+            calculateStorageUsage();
         };
 
         // Re-check on window resize
@@ -2222,7 +2340,7 @@
             }
 
             container.innerHTML = segments.map((segment, index) => `
-                <div class="segment-item" draggable="true" data-index="${index}" 
+                <div class="segment-item${segmentsCollapsed ? ' collapsed' : ''}" draggable="true" data-index="${index}" 
                      ondragstart="handleDragStart(event)" 
                      ondragend="handleDragEnd(event)" 
                      ondragover="handleDragOver(event)" 
@@ -2239,7 +2357,7 @@
                     ${segment.keyPoints.length > 0 ? `
                         <div class="segment-key-points">
                             <strong>Key Points:</strong>
-                            <ul>
+                            <ul style="margin-top: 8px;">
                                 ${segment.keyPoints.map(point => `<li>${point}</li>`).join('')}
                             </ul>
                         </div>
@@ -2695,6 +2813,74 @@
                 }
             } catch (e) {
                 console.error('Error loading data:', e);
+            }
+        }
+
+        // Calculate storage usage
+        function calculateStorageUsage() {
+            function formatBytes(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
+            }
+
+            function getSize(obj) {
+                return new Blob([JSON.stringify(obj)]).size;
+            }
+
+            // Calculate individual sizes
+            const episodeDetailsSize = getSize(episodeDetails);
+            const peopleSize = getSize(people);
+            const assetsSize = getSize(assets);
+            const segmentsSize = getSize(segments);
+            const settingsData = {
+                settings: settings,
+                mobileWarningDismissed: localStorage.getItem('mobileWarningDismissed')
+            };
+            const settingsSize = getSize(settingsData);
+
+            // Calculate total
+            const totalSize = episodeDetailsSize + peopleSize + assetsSize + segmentsSize + settingsSize;
+
+            // Update UI
+            document.getElementById('storageSize').textContent = formatBytes(totalSize);
+            document.getElementById('episodeDetailsSize').textContent = formatBytes(episodeDetailsSize);
+            document.getElementById('peopleSize').textContent = formatBytes(peopleSize);
+            document.getElementById('assetsSize').textContent = formatBytes(assetsSize);
+            document.getElementById('segmentsSize').textContent = formatBytes(segmentsSize);
+            document.getElementById('settingsSize').textContent = formatBytes(settingsSize);
+        }
+
+        // Reset Podcast Planner
+        function resetPodcastPlanner() {
+            const confirmation = confirm(
+                '⚠️ WARNING: This will permanently delete ALL your data!\n\n' +
+                'This includes:\n' +
+                '• All episode details\n' +
+                '• All people (hosts, guests, producers)\n' +
+                '• All assets\n' +
+                '• All segments\n' +
+                '• All settings\n\n' +
+                'Have you backed up your data by exporting to JSON?\n\n' +
+                'Click OK to proceed with the reset, or Cancel to go back.'
+            );
+
+            if (confirmation) {
+                const doubleConfirm = confirm(
+                    'Are you absolutely sure?\n\n' +
+                    'This action CANNOT be undone!\n\n' +
+                    'Click OK to reset everything, or Cancel to keep your data.'
+                );
+
+                if (doubleConfirm) {
+                    // Clear localStorage
+                    localStorage.clear();
+                    
+                    // Reload the page
+                    window.location.reload();
+                }
             }
         }
 
