@@ -457,12 +457,14 @@ Get help planning your episode with AI:
 
 ## Version History
 
+
+### Version 1.9 (December 2025)
+- **Go Live Save & Next Fix**: "Save & Next" now saves notes and time, advances to the next segment, and never shows a reset or unsaved notes warning. Only the plain Next button warns about unsaved notes.
+- **PDF Export**: Now fills the full printable width with 5% padding on each side for best results.
+- **All previous features retained.**
+
 ### Version 1.78 (December 2025)
-- **Improved PDF Export**: Enhanced PDF export with better user control
-- Opens PDF preview in new tab instead of automatic print
-- Print button in top right corner (🖨️ Print / Save as PDF)
-- Full webkit support ensures colors print correctly
-- Users can review document before printing or saving
+*See previous releases for details.*
 
 ### Version 1.77 (December 2025)
 - **Custom Color Scheme**: Create your own gradient color scheme with two custom colors

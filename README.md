@@ -224,13 +224,14 @@ episodeDetails = {
 
 ## Version History
 
+
+### Version 1.9 (December 2025)
+- **Go Live Save & Next Fix**: Save & Next now saves notes and time, advances segment, and never shows a reset or unsaved notes warning. Only the plain Next button warns about unsaved notes.
+- **PDF Export**: Enhanced PDF export with full-width layout and 5% padding on each side for better print results.
+- **All previous features retained.**
+
 ### Version 1.78 (December 2025)
-- **Improved PDF Export**: Enhanced PDF export functionality
-- Opens in new tab/page instead of automatic print dialog
-- Print button in top right corner for manual print/save
-- Full webkit color support ensures all colors display correctly
-- Uses browser's native print-to-PDF capability
-- No external libraries required
+*See previous releases for details.*
 
 ### Version 1.77 (December 2025)
 - **Custom Color Scheme**: Create your own gradient color scheme
