@@ -36,10 +36,13 @@ A single-page web application for podcast hosts to plan and organize their episo
 
 ### RSS.com Integration
 - Upload audio files directly to RSS.com (MP3, M4A, WAV, AAC, OGG, FLAC up to 500MB)
+- Upload episode cover images (JPG, PNG, WebP up to 10MB) with auto-upload
 - Create and manage episodes with full metadata support
 - View all podcast episodes with status and processing indicators
+- Paginated episode view (9 per page) with cover art display
 - Auto-polling for episode processing status
-- Optional audio upload - create episodes with or without audio
+- Optional audio/image upload - create episodes with or without media
+- Gradient placeholder for episodes without cover images
 - Secure local storage of API credentials
 
 ### AI Integration
@@ -117,8 +120,8 @@ A single-page web application for podcast hosts to plan and organize their episo
 - **Type**: Single-Page Application (SPA)
 - **Technologies**: HTML5, CSS3, Vanilla JavaScript
 - **Dependencies**: html2canvas (CDN for image export)
-- **File Size**: ~90KB single file
-- **Version**: 1.91
+- **File Size**: ~95KB single file
+- **Version**: 1.95
 
 ### Data Structure
 ```javascript
@@ -248,6 +251,21 @@ rssState = {
 - Safe for sensitive planning information
 
 ## Version History
+
+### Version 1.95 (December 2025)
+- **Episode Cover Image Upload**: Auto-upload feature for episode artwork
+  - Drag and drop or browse for images (JPG, PNG, WebP up to 10MB)
+  - Automatic upload on file selection
+  - Image preview before upload
+  - Images attach to episodes via RSS.com API
+- **Episode Grid Enhancements**: Improved visual consistency
+  - Pagination with 9 episodes per page
+  - Gradient placeholder (📻 icon) for episodes without cover images
+  - Consistent card heights for perfect grid alignment
+- **CORS Fix**: Updated proxy server to handle S3 presigned URL uploads
+  - Both API calls and file uploads now route through proxy
+  - Eliminates CORS issues for audio and image uploads
+- **All previous features retained.**
 
 ### Version 1.91 (December 2025)
 - **RSS.com Integration**: Full API integration for episode management
