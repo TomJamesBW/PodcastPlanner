@@ -1576,6 +1576,30 @@
                         </div>
 
                         <div class="form-group">
+                            <label>Episode Cover Image (optional)</label>
+                            <div class="file-drop-zone" id="imageDropZone" ondragover="event.preventDefault()" ondrop="handleImageDrop(event)">
+                                <div id="imageDropText">
+                                    <p>📷 Drag and drop an image here</p>
+                                    <p style="font-size: 14px; color: #6c757d;">or</p>
+                                    <input type="file" id="imageFileInput" accept="image/*" onchange="handleImageFileSelect(event)" style="display: none;">
+                                    <button type="button" class="btn btn-secondary btn-small" onclick="document.getElementById('imageFileInput').click()">Browse Files</button>
+                                    <p style="font-size: 12px; color: #6c757d; margin-top: 10px;">Supported: JPG, PNG (max 10MB)</p>
+                                </div>
+                                <div id="imageFileInfo" style="display: none;">
+                                    <p><strong id="imageFileName"></strong></p>
+                                    <p style="font-size: 14px; color: #6c757d;"><span id="imageFileSize"></span></p>
+                                    <div id="imagePreview" style="margin: 10px 0;"></div>
+                                    <p style="color: #6c757d; font-size: 14px;">⏳ Uploading image...</p>
+                                </div>
+                                <div id="imageUploadSuccess" style="display: none; padding: 15px; background: #d4edda; border-radius: 6px; border: 1px solid #c3e6cb; color: #155724;">
+                                    <p style="margin: 0;"><strong>✓ Image uploaded successfully!</strong></p>
+                                    <p style="margin: 5px 0 0 0; font-size: 12px;">Upload ID: <span id="uploadedImageId"></span></p>
+                                    <button type="button" class="btn btn-secondary btn-small" onclick="clearImageUpload()" style="margin-top: 10px;">Upload Different Image</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
                             <label for="rssScheduleDateTime">Schedule Date & Time (optional)</label>
                             <input type="datetime-local" id="rssScheduleDateTime">
                             <p style="font-size: 12px; color: #6c757d; margin-top: 5px;">Leave empty to save as draft, or set a future date/time to schedule publication</p>
@@ -1927,10 +1951,13 @@
 
         let rssState = {
             uploadedAudioId: null,
+            uploadedImageId: null,
             currentEpisodeId: null,
             pollingInterval: null,
             episodes: [],
-            availablePodcasts: []
+            availablePodcasts: [],
+            currentPage: 1,
+            episodesPerPage: 9
         };
 
         // Section collapse functionality
@@ -3264,23 +3291,35 @@
 
                 if (!response.ok) {
                     // Handle error response
+                    console.error('API Error Response:', data);
                     const errorMsg = data.message || `API Error: ${response.status}`;
+
+                    // Show detailed validation errors if available
+                    if (data.field_errors) {
+                        console.error('Field errors:', data.field_errors);
+                        const fieldErrors = Object.entries(data.field_errors)
+                            .map(([field, errors]) => `${field}: ${errors.join(', ')}`)
+                            .join('\n');
+                        alert(`Validation Error:\n${fieldErrors}`);
+                    } else {
+                        alert(`API Error: ${errorMsg}`);
+                    }
+
                     throw new Error(errorMsg);
                 }
 
                 return data;
             } catch (error) {
                 console.error('RSS API Error:', error);
-                alert(`API Error: ${error.message}`);
                 throw error;
             }
         }
 
         // Create presigned upload URL
-        async function createPresignedUpload(file) {
+        async function createPresignedUpload(file, assetType = 'audio') {
             const endpoint = `/v4/podcasts/${rssConfig.podcastId}/assets/presigned-uploads`;
             const body = {
-                asset_type: 'audio',
+                asset_type: assetType,
                 expected_mime: file.type,
                 filename: file.name
             };
@@ -3288,10 +3327,13 @@
             return await rssAPIRequest(endpoint, 'POST', body);
         }
 
-        // Upload file to presigned URL (direct to S3, no API key needed)
+        // Upload file to presigned URL (via proxy to avoid CORS)
         async function uploadToPresignedURL(presignedUrl, file) {
             try {
-                const response = await fetch(presignedUrl, {
+                // Route S3 upload through proxy to avoid CORS issues
+                const proxyUrl = `${rssConfig.baseUrl}?url=${encodeURIComponent(presignedUrl)}`;
+
+                const response = await fetch(proxyUrl, {
                     method: 'PUT',
                     body: file,
                     headers: {
@@ -3461,6 +3503,129 @@
             document.getElementById('audioFileInput').value = '';
         }
 
+        // ========================================
+        // Image Upload Functions
+        // ========================================
+
+        // Validate image file
+        function validateImageFile(file) {
+            const maxSize = 10 * 1024 * 1024; // 10MB
+            const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+
+            if (!allowedTypes.includes(file.type)) {
+                alert('Invalid file type. Please upload a JPG, PNG, or WebP image.');
+                return false;
+            }
+
+            if (file.size > maxSize) {
+                alert(`File is too large. Maximum size is 10MB. Your file is ${formatBytes(file.size)}.`);
+                return false;
+            }
+
+            return true;
+        }
+
+        // Handle image file selection
+        function handleImageFileSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+                handleImageFile(file);
+            }
+        }
+
+        // Handle image drop
+        function handleImageDrop(event) {
+            event.preventDefault();
+            const dropZone = document.getElementById('imageDropZone');
+            dropZone.classList.remove('drag-over');
+
+            const file = event.dataTransfer.files[0];
+            if (file) {
+                handleImageFile(file);
+            }
+        }
+
+        // Handle image file
+        async function handleImageFile(file) {
+            if (!validateImageFile(file)) return;
+
+            // Show file info
+            document.getElementById('imageDropText').style.display = 'none';
+            document.getElementById('imageFileInfo').style.display = 'block';
+            document.getElementById('imageUploadSuccess').style.display = 'none';
+
+            document.getElementById('imageFileName').textContent = file.name;
+            document.getElementById('imageFileSize').textContent = formatBytes(file.size);
+
+            // Show image preview
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const preview = document.getElementById('imagePreview');
+                preview.innerHTML = `<img src="${e.target.result}" style="max-width: 200px; max-height: 200px; border-radius: 6px;">`;
+            };
+            reader.readAsDataURL(file);
+
+            // Store file for upload
+            window.selectedImageFile = file;
+
+            // Auto-upload the image immediately
+            await uploadImage();
+        }
+
+        // Upload image
+        async function uploadImage() {
+            const file = window.selectedImageFile;
+            if (!file) {
+                alert('No image selected');
+                return;
+            }
+
+            try {
+                console.log('Starting image upload:', file.name, file.type, file.size);
+
+                // Step 1: Create presigned upload
+                console.log('Requesting presigned URL for image...');
+                const presignedData = await createPresignedUpload(file, 'image');
+                console.log('Received presigned data:', presignedData);
+
+                // Step 2: Upload to presigned URL
+                console.log('Uploading to presigned URL:', presignedData.url);
+                await uploadToPresignedURL(presignedData.url, file);
+                console.log('Image uploaded to S3 successfully');
+
+                // Step 3: Store upload ID
+                rssState.uploadedImageId = presignedData.id;
+                console.log('Stored image upload ID:', rssState.uploadedImageId);
+
+                // Step 4: Show success
+                document.getElementById('uploadedImageId').textContent = presignedData.id;
+                document.getElementById('imageUploadSuccess').style.display = 'block';
+                document.getElementById('imageFileInfo').style.display = 'none';
+
+                alert('Image uploaded successfully! It will be used as the episode cover.');
+            } catch (error) {
+                console.error('Image upload error:', error);
+                alert('Image upload failed: ' + error.message);
+                // Show error state
+                document.getElementById('imageFileInfo').innerHTML = `
+                    <p style="color: #dc3545;"><strong>Upload failed:</strong> ${error.message}</p>
+                    <button type="button" class="btn btn-secondary" onclick="clearImageUpload()">Try Again</button>
+                `;
+            }
+        }
+
+        // Clear image upload
+        function clearImageUpload() {
+            rssState.uploadedImageId = null;
+            document.getElementById('imageFileInfo').style.display = 'none';
+            document.getElementById('imageUploadSuccess').style.display = 'none';
+            document.getElementById('imageDropText').style.display = 'block';
+            document.getElementById('imageFileInput').value = '';
+            document.getElementById('imagePreview').innerHTML = '';
+            document.getElementById('uploadImageBtn').style.display = 'inline-block';
+            window.selectedImageFile = null;
+        }
+
         // Update RSS episode description character counter
         function updateRSSEpisodeDescriptionCounter() {
             const description = document.getElementById('rssEpisodeDescription').value;
@@ -3497,6 +3662,12 @@
                     episodeData.audio_upload_id = rssState.uploadedAudioId;
                 }
 
+                // Add cover_upload_id only if image was uploaded
+                if (rssState.uploadedImageId) {
+                    episodeData.cover_upload_id = rssState.uploadedImageId;
+                    console.log('Including cover image with ID:', rssState.uploadedImageId);
+                }
+
                 // Add optional fields
                 if (explicit) {
                     episodeData.itunes_explicit = true;
@@ -3515,6 +3686,9 @@
                 const submitBtn = document.getElementById('submitEpisodeBtn');
                 submitBtn.disabled = true;
                 submitBtn.textContent = 'Creating...';
+
+                // Log episode data for debugging
+                console.log('Creating episode with data:', episodeData);
 
                 // Create episode
                 const episode = await createEpisode(episodeData);
@@ -3544,8 +3718,20 @@
         // Show processing status box
         function showProcessingStatus(episode) {
             const statusBox = document.getElementById('episodeProcessingStatus');
-            statusBox.style.display = 'block';
 
+            // Only show processing status if audio was uploaded
+            if (!rssState.uploadedAudioId) {
+                statusBox.style.display = 'none';
+                // Episode created successfully without audio - show alert and reset form
+                alert('Episode created successfully!');
+                setTimeout(() => {
+                    resetCreateEpisodeForm();
+                    clearAudioUpload();
+                }, 500);
+                return;
+            }
+
+            statusBox.style.display = 'block';
             const status = episode.processing.transcode.status;
             updateProcessingStatusUI(status);
         }
@@ -3569,6 +3755,11 @@
 
         // Start polling episode status
         function startEpisodePolling(episodeId) {
+            // Don't poll if no audio was uploaded
+            if (!rssState.uploadedAudioId) {
+                return;
+            }
+
             let pollCount = 0;
             const maxPolls = 24; // 24 * 5 seconds = 2 minutes max
 
@@ -3620,6 +3811,9 @@
             document.getElementById('episodeProcessingStatus').style.display = 'none';
             updateRSSEpisodeDescriptionCounter();
 
+            // Clear image upload
+            clearImageUpload();
+
             const submitBtn = document.getElementById('submitEpisodeBtn');
             submitBtn.disabled = false;
             submitBtn.textContent = 'Create Episode';
@@ -3633,13 +3827,17 @@
                 refreshBtn.textContent = 'Loading...';
 
                 const episodes = await getEpisodes();
+                console.log('Fetched episodes:', episodes);
                 rssState.episodes = episodes;
+                rssState.currentPage = 1; // Reset to first page
 
                 renderEpisodes(episodes);
 
                 refreshBtn.disabled = false;
                 refreshBtn.textContent = 'Refresh Data';
             } catch (error) {
+                console.error('Error refreshing episodes:', error);
+                alert('Failed to refresh episodes: ' + error.message);
                 const refreshBtn = document.getElementById('refreshEpisodesBtn');
                 refreshBtn.disabled = false;
                 refreshBtn.textContent = 'Refresh Data';
@@ -3660,16 +3858,25 @@
                 return;
             }
 
+            // Calculate pagination
+            const totalPages = Math.ceil(episodes.length / rssState.episodesPerPage);
+            const startIdx = (rssState.currentPage - 1) * rssState.episodesPerPage;
+            const endIdx = startIdx + rssState.episodesPerPage;
+            const paginatedEpisodes = episodes.slice(startIdx, endIdx);
+
             let html = '<div class="people-list" style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));">';
 
-            episodes.forEach(episode => {
+            paginatedEpisodes.forEach(episode => {
                 const statusBadge = getStatusBadge(episode.status);
-                const processingStatus = episode.processing.transcode.status;
+                const processingStatus = episode.processing?.transcode?.status || 'done';
                 const processingBadge = getProcessingBadge(processingStatus);
 
                 html += `
                     <div class="person-item" style="border-color: ${getStatusColor(episode.status)};">
-                        ${episode.cover_url ? `<img src="${episode.cover_url}" alt="${episode.title}" style="width: 100%; border-radius: 8px; margin-bottom: 12px;">` : ''}
+                        ${episode.cover_url ?
+                            `<img src="${episode.cover_url}" alt="${episode.title}" style="width: 100%; border-radius: 8px; margin-bottom: 12px;">` :
+                            `<div style="width: 100%; aspect-ratio: 16/9; background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%); border-radius: 8px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 48px; opacity: 0.7;">📻</div>`
+                        }
                         <strong style="font-size: 16px; display: block; margin-bottom: 8px;">${episode.title}</strong>
                         <div style="font-size: 12px; color: #6c757d; margin-bottom: 8px;">
                             ${episode.itunes_episode ? `Episode ${episode.itunes_episode}` : ''}
@@ -3687,7 +3894,28 @@
             });
 
             html += '</div>';
+
+            // Add pagination controls if needed
+            if (totalPages > 1) {
+                html += `
+                    <div style="display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 30px;">
+                        <button class="btn btn-secondary" onclick="changePage(${rssState.currentPage - 1})" ${rssState.currentPage === 1 ? 'disabled' : ''}>Previous</button>
+                        <span style="color: var(--text-color);">Page ${rssState.currentPage} of ${totalPages}</span>
+                        <button class="btn btn-secondary" onclick="changePage(${rssState.currentPage + 1})" ${rssState.currentPage === totalPages ? 'disabled' : ''}>Next</button>
+                    </div>
+                `;
+            }
+
             container.innerHTML = html;
+        }
+
+        // Change page
+        function changePage(newPage) {
+            const totalPages = Math.ceil(rssState.episodes.length / rssState.episodesPerPage);
+            if (newPage < 1 || newPage > totalPages) return;
+
+            rssState.currentPage = newPage;
+            renderEpisodes(rssState.episodes);
         }
 
         // Get status badge HTML
