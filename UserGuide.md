@@ -333,6 +333,17 @@ Upload audio files for your episodes:
 4. Once uploaded, you'll see the **Upload ID** displayed
 5. Use **Clear** to remove the upload and start over
 
+### Upload Episode Cover Image
+
+Upload cover artwork for your episode (optional):
+
+1. **Drag and drop** an image file into the drop zone, or click **Browse Files**
+2. **Supported formats**: JPG, PNG, WebP (max 10MB)
+3. Image **uploads automatically** when selected
+4. You'll see a preview and upload confirmation
+5. Once uploaded, the image will be attached to your episode
+6. Use **Upload Different Image** to change the cover art
+
 ### Create Episode
 
 Create a new episode on RSS.com:
@@ -344,9 +355,10 @@ Create a new episode on RSS.com:
 4. **Episode Number** (optional): Enter the episode number
 5. **Season Number** (optional): Enter the season number
 6. **Explicit Content**: Check if the episode contains explicit content
-7. **Schedule Date/Time** (optional): Set when the episode should publish
+7. **Episode Cover Image** (optional): Upload cover artwork as described above
+8. **Schedule Date/Time** (optional): Set when the episode should publish
    - Uses your local time, automatically converted to UTC
-8. **Audio**: If you uploaded audio above, it will be automatically attached
+9. **Audio**: If you uploaded audio above, it will be automatically attached
    - You can also create an episode without audio and add it later
 
 Click **Create Episode** to submit. You'll see a processing status indicator that updates automatically.
@@ -356,13 +368,16 @@ Click **Create Episode** to submit. You'll see a processing status indicator tha
 View all episodes in your RSS.com podcast:
 
 1. Click **Refresh Data** to fetch the latest episodes
-2. Episodes display as cards showing:
+2. Episodes display as cards in a grid layout showing:
+   - Cover image (or gradient placeholder with 📻 icon if none uploaded)
    - Episode title
    - Episode and season numbers
    - Status badge (Draft, Scheduled, or Published)
    - Processing status (Pending, Processing, Ready, or Error)
    - Publication date
-   - Cover image (if available)
+3. **Pagination**: Episodes are displayed 9 per page
+   - Use **Previous** and **Next** buttons to navigate
+   - Current page number is shown between buttons
 
 The list automatically refreshes after creating new episodes.
 
@@ -532,6 +547,21 @@ Get help planning your episode with AI:
 ---
 
 ## Version History
+
+### Version 1.95 (December 2025)
+- **Episode Cover Image Upload**: Auto-upload feature for episode artwork
+  - Drag and drop or browse for images (JPG, PNG, WebP up to 10MB)
+  - Automatic upload on file selection with preview
+  - Images attach to episodes via RSS.com API
+  - "Upload Different Image" button to replace cover art
+- **Episode Grid Enhancements**: Improved visual consistency and navigation
+  - Pagination with 9 episodes per page with Previous/Next buttons
+  - Gradient placeholder with 📻 icon for episodes without cover images
+  - Consistent card heights for perfect grid alignment
+- **CORS Fix**: Updated proxy server to handle S3 presigned URL uploads
+  - Eliminates CORS issues for both audio and image uploads
+  - All uploads now route through proxy server for reliability
+- **All previous features retained.**
 
 ### Version 1.91 (December 2025)
 - **RSS.com Integration**: Upload and manage podcast episodes directly from Podcast Planner
