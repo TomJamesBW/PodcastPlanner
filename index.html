@@ -1922,7 +1922,7 @@
             podcastTitle: '',
             apiKey: '',
             enabled: false,
-            baseUrl: 'https://api.rss.com'
+            baseUrl: 'https://podcastplanner.channel84.co.uk/rss-proxy.php'
         };
 
         let rssState = {
@@ -2149,8 +2149,9 @@
                 btn.disabled = true;
                 btn.textContent = 'Loading...';
 
-                // Fetch podcasts from API
-                const response = await fetch('https://api.rss.com/v4/podcasts', {
+                // Fetch podcasts from API via proxy
+                const proxyUrl = `${rssConfig.baseUrl}?path=${encodeURIComponent('/v4/podcasts')}`;
+                const response = await fetch(proxyUrl, {
                     method: 'GET',
                     headers: {
                         'X-Api-Key': rssConfig.apiKey
@@ -3243,7 +3244,7 @@
 
         // Generic API request handler
         async function rssAPIRequest(endpoint, method = 'GET', body = null) {
-            const url = `${rssConfig.baseUrl}${endpoint}`;
+            const url = `${rssConfig.baseUrl}?path=${encodeURIComponent(endpoint)}`;
             const headers = {
                 'X-Api-Key': rssConfig.apiKey
             };
