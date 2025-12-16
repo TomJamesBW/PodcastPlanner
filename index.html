@@ -1536,19 +1536,19 @@
 
                     <div id="createEpisodeForm">
                         <div class="form-group">
-                            <label for="episodeTitle">Title *</label>
-                            <input type="text" id="episodeTitle" placeholder="Enter episode title" maxlength="250">
+                            <label for="rssEpisodeTitle">Title *</label>
+                            <input type="text" id="rssEpisodeTitle" placeholder="Enter episode title" maxlength="250">
                         </div>
 
                         <div class="form-group">
-                            <label for="episodeDescription">Description *</label>
-                            <textarea id="episodeDescription" placeholder="Enter episode description" maxlength="4000" oninput="updateEpisodeDescriptionCounter()"></textarea>
-                            <div class="char-counter" id="episodeDescriptionCounter">0 / 4000</div>
+                            <label for="rssEpisodeDescription">Description *</label>
+                            <textarea id="rssEpisodeDescription" placeholder="Enter episode description" maxlength="4000" oninput="updateRSSEpisodeDescriptionCounter()"></textarea>
+                            <div class="char-counter" id="rssEpisodeDescriptionCounter">0 / 4000</div>
                         </div>
 
                         <div class="form-group">
-                            <label for="episodeType">Episode Type</label>
-                            <select id="episodeType">
+                            <label for="rssEpisodeType">Episode Type</label>
+                            <select id="rssEpisodeType">
                                 <option value="full" selected>Full</option>
                                 <option value="trailer">Trailer</option>
                                 <option value="bonus">Bonus</option>
@@ -1557,27 +1557,27 @@
 
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
                             <div class="form-group">
-                                <label for="episodeNumber">Episode Number (optional)</label>
-                                <input type="number" id="episodeNumber" placeholder="e.g., 42" min="1">
+                                <label for="rssEpisodeNumber">Episode Number (optional)</label>
+                                <input type="number" id="rssEpisodeNumber" placeholder="e.g., 42" min="1">
                             </div>
 
                             <div class="form-group">
-                                <label for="seasonNumber">Season Number (optional)</label>
-                                <input type="number" id="seasonNumber" placeholder="e.g., 2" min="1">
+                                <label for="rssSeasonNumber">Season Number (optional)</label>
+                                <input type="number" id="rssSeasonNumber" placeholder="e.g., 2" min="1">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label style="display: flex; align-items: center; gap: 8px;">
-                                <input type="checkbox" id="episodeExplicit">
+                                <input type="checkbox" id="rssEpisodeExplicit">
                                 Explicit Content
                             </label>
                             <p style="font-size: 12px; color: #6c757d; margin-top: 5px;">Check if this episode contains explicit content</p>
                         </div>
 
                         <div class="form-group">
-                            <label for="scheduleDateTime">Schedule Date & Time (optional)</label>
-                            <input type="datetime-local" id="scheduleDateTime">
+                            <label for="rssScheduleDateTime">Schedule Date & Time (optional)</label>
+                            <input type="datetime-local" id="rssScheduleDateTime">
                             <p style="font-size: 12px; color: #6c757d; margin-top: 5px;">Leave empty to save as draft, or set a future date/time to schedule publication</p>
                         </div>
 
@@ -1813,22 +1813,29 @@
 
             <div class="section">
                 <div class="section-header" onclick="toggleSection('rss-config-content')">
-                    <span class="section-toggle" id="rss-config-content-toggle">−</span>
+                    <span class="section-toggle" id="rss-config-content-toggle">+</span>
                     <h2 style="margin: 0;">RSS.com Integration</h2>
                 </div>
-                <div class="section-content" id="rss-config-content">
+                <div class="section-content collapsed" id="rss-config-content">
                     <p style="color: #6c757d; margin-bottom: 20px;">Connect your RSS.com account to upload and manage podcast episodes directly from this tool.</p>
 
                     <div class="form-group">
-                        <label for="rssPodcastId">Podcast ID</label>
-                        <input type="text" id="rssPodcastId" placeholder="Enter your RSS.com Podcast ID" oninput="saveRSSSettings()">
-                        <p style="font-size: 12px; color: #6c757d; margin-top: 5px;">Find this in your RSS.com dashboard</p>
+                        <label for="rssApiKey">API Key</label>
+                        <input type="password" id="rssApiKey" placeholder="Enter your RSS.com API Key" oninput="onRSSApiKeyChange()">
+                        <p style="font-size: 12px; color: #6c757d; margin-top: 5px;">Get your API key from <a href="https://dashboard.rss.com/api-access/" target="_blank" style="color: var(--primary-color);">RSS.com Dashboard</a></p>
                     </div>
 
                     <div class="form-group">
-                        <label for="rssApiKey">API Key</label>
-                        <input type="password" id="rssApiKey" placeholder="Enter your RSS.com API Key" oninput="saveRSSSettings()">
-                        <p style="font-size: 12px; color: #6c757d; margin-top: 5px;">Get your API key from <a href="https://dashboard.rss.com/api-access/" target="_blank" style="color: var(--primary-color);">RSS.com Dashboard</a></p>
+                        <button class="btn btn-primary" id="getShowIdBtn" onclick="fetchPodcasts()" disabled>Get Show ID</button>
+                        <p style="font-size: 12px; color: #6c757d; margin-top: 5px;">Click to fetch your podcasts from RSS.com</p>
+                    </div>
+
+                    <div class="form-group" id="podcastSelectGroup" style="display: none;">
+                        <label for="rssPodcastSelect">Select Your Podcast</label>
+                        <select id="rssPodcastSelect" onchange="onPodcastSelect()">
+                            <option value="">-- Select a podcast --</option>
+                        </select>
+                        <p style="font-size: 12px; color: #6c757d; margin-top: 5px;">Choose which podcast to manage</p>
                     </div>
 
                     <div class="form-group">
@@ -1837,7 +1844,7 @@
                             Enable RSS API
                         </label>
                         <p style="font-size: 12px; color: #6c757d; margin-top: 5px;">
-                            Both Podcast ID and API Key must be provided to enable the RSS integration. Once enabled, the RSS tab will appear.
+                            Select a podcast to enable the RSS integration. Once enabled, the RSS tab will appear.
                         </p>
                     </div>
                 </div>
@@ -1911,7 +1918,8 @@
 
         // RSS API state
         let rssConfig = {
-            podcastId: '',
+            podcastId: null,
+            podcastTitle: '',
             apiKey: '',
             enabled: false,
             baseUrl: 'https://api.rss.com'
@@ -1921,7 +1929,8 @@
             uploadedAudioId: null,
             currentEpisodeId: null,
             pollingInterval: null,
-            episodes: []
+            episodes: [],
+            availablePodcasts: []
         };
 
         // Section collapse functionality
@@ -2108,25 +2117,104 @@
         });
 
         // RSS Settings Functions
-        function saveRSSSettings() {
-            const podcastId = document.getElementById('rssPodcastId').value.trim();
+        function onRSSApiKeyChange() {
             const apiKey = document.getElementById('rssApiKey').value.trim();
-
-            rssConfig.podcastId = podcastId;
             rssConfig.apiKey = apiKey;
 
-            // Enable checkbox if both fields are filled
-            const enableCheckbox = document.getElementById('enableRSSAPI');
-            if (podcastId && apiKey) {
-                enableCheckbox.disabled = false;
-            } else {
-                enableCheckbox.disabled = true;
-                enableCheckbox.checked = false;
+            // Enable/disable Get Show ID button based on API key
+            const getShowIdBtn = document.getElementById('getShowIdBtn');
+            getShowIdBtn.disabled = !apiKey;
+
+            // If API key is cleared, reset everything
+            if (!apiKey) {
+                document.getElementById('podcastSelectGroup').style.display = 'none';
+                document.getElementById('rssPodcastSelect').innerHTML = '<option value="">-- Select a podcast --</option>';
+                rssConfig.podcastId = null;
+                rssConfig.podcastTitle = '';
+                document.getElementById('enableRSSAPI').disabled = true;
+                document.getElementById('enableRSSAPI').checked = false;
                 rssConfig.enabled = false;
                 toggleRSSTab(false);
             }
 
-            // Update settings object and save
+            settings.rssConfig = rssConfig;
+            saveSettings();
+        }
+
+        async function fetchPodcasts() {
+            const btn = document.getElementById('getShowIdBtn');
+            const originalText = btn.textContent;
+
+            try {
+                btn.disabled = true;
+                btn.textContent = 'Loading...';
+
+                // Fetch podcasts from API
+                const response = await fetch('https://api.rss.com/v4/podcasts', {
+                    method: 'GET',
+                    headers: {
+                        'X-Api-Key': rssConfig.apiKey
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API Error: ${response.status}`);
+                }
+
+                const podcasts = await response.json();
+                rssState.availablePodcasts = podcasts;
+
+                // Populate dropdown
+                const select = document.getElementById('rssPodcastSelect');
+                select.innerHTML = '<option value="">-- Select a podcast --</option>';
+
+                podcasts.forEach(podcast => {
+                    const option = document.createElement('option');
+                    option.value = podcast.id;
+                    option.textContent = podcast.title;
+                    option.dataset.slug = podcast.slug;
+                    select.appendChild(option);
+                });
+
+                // Show the select dropdown
+                document.getElementById('podcastSelectGroup').style.display = 'block';
+
+                // If we have a saved podcast ID, select it
+                if (rssConfig.podcastId) {
+                    select.value = rssConfig.podcastId;
+                }
+
+                alert(`Successfully loaded ${podcasts.length} podcast(s)!`);
+
+            } catch (error) {
+                console.error('Error fetching podcasts:', error);
+                alert(`Failed to fetch podcasts: ${error.message}`);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = originalText;
+            }
+        }
+
+        function onPodcastSelect() {
+            const select = document.getElementById('rssPodcastSelect');
+            const selectedValue = select.value;
+
+            if (selectedValue) {
+                rssConfig.podcastId = parseInt(selectedValue);
+                const selectedOption = select.options[select.selectedIndex];
+                rssConfig.podcastTitle = selectedOption.textContent;
+
+                // Enable the checkbox
+                document.getElementById('enableRSSAPI').disabled = false;
+            } else {
+                rssConfig.podcastId = null;
+                rssConfig.podcastTitle = '';
+                document.getElementById('enableRSSAPI').disabled = true;
+                document.getElementById('enableRSSAPI').checked = false;
+                rssConfig.enabled = false;
+                toggleRSSTab(false);
+            }
+
             settings.rssConfig = rssConfig;
             saveSettings();
         }
@@ -2150,17 +2238,25 @@
             if (settings.rssConfig) {
                 rssConfig = settings.rssConfig;
 
-                // Populate form fields
-                if (rssConfig.podcastId) {
-                    document.getElementById('rssPodcastId').value = rssConfig.podcastId;
-                }
+                // Populate API key
                 if (rssConfig.apiKey) {
                     document.getElementById('rssApiKey').value = rssConfig.apiKey;
+                    document.getElementById('getShowIdBtn').disabled = false;
                 }
 
-                // Update checkbox state
-                const enableCheckbox = document.getElementById('enableRSSAPI');
-                if (rssConfig.podcastId && rssConfig.apiKey) {
+                // If we have a saved podcast ID, we should show it
+                if (rssConfig.podcastId && rssConfig.podcastTitle) {
+                    // Manually add the saved podcast to dropdown
+                    const select = document.getElementById('rssPodcastSelect');
+                    const option = document.createElement('option');
+                    option.value = rssConfig.podcastId;
+                    option.textContent = rssConfig.podcastTitle;
+                    select.appendChild(option);
+                    select.value = rssConfig.podcastId;
+                    document.getElementById('podcastSelectGroup').style.display = 'block';
+
+                    // Enable checkbox
+                    const enableCheckbox = document.getElementById('enableRSSAPI');
                     enableCheckbox.disabled = false;
                     enableCheckbox.checked = rssConfig.enabled;
                     toggleRSSTab(rssConfig.enabled);
@@ -3364,23 +3460,23 @@
             document.getElementById('audioFileInput').value = '';
         }
 
-        // Update episode description character counter
-        function updateEpisodeDescriptionCounter() {
-            const description = document.getElementById('episodeDescription').value;
-            document.getElementById('episodeDescriptionCounter').textContent = `${description.length} / 4000`;
+        // Update RSS episode description character counter
+        function updateRSSEpisodeDescriptionCounter() {
+            const description = document.getElementById('rssEpisodeDescription').value;
+            document.getElementById('rssEpisodeDescriptionCounter').textContent = `${description.length} / 4000`;
         }
 
         // Submit episode creation form
         async function submitCreateEpisode() {
             try {
                 // Get form values
-                const title = document.getElementById('episodeTitle').value.trim();
-                const description = document.getElementById('episodeDescription').value.trim();
-                const episodeType = document.getElementById('episodeType').value;
-                const episodeNumber = document.getElementById('episodeNumber').value;
-                const seasonNumber = document.getElementById('seasonNumber').value;
-                const explicit = document.getElementById('episodeExplicit').checked;
-                const scheduleDateTime = document.getElementById('scheduleDateTime').value;
+                const title = document.getElementById('rssEpisodeTitle').value.trim();
+                const description = document.getElementById('rssEpisodeDescription').value.trim();
+                const episodeType = document.getElementById('rssEpisodeType').value;
+                const episodeNumber = document.getElementById('rssEpisodeNumber').value;
+                const seasonNumber = document.getElementById('rssSeasonNumber').value;
+                const explicit = document.getElementById('rssEpisodeExplicit').checked;
+                const scheduleDateTime = document.getElementById('rssScheduleDateTime').value;
 
                 // Validate required fields
                 if (!title || !description) {
@@ -3513,15 +3609,15 @@
 
         // Reset create episode form
         function resetCreateEpisodeForm() {
-            document.getElementById('episodeTitle').value = '';
-            document.getElementById('episodeDescription').value = '';
-            document.getElementById('episodeType').value = 'full';
-            document.getElementById('episodeNumber').value = '';
-            document.getElementById('seasonNumber').value = '';
-            document.getElementById('episodeExplicit').checked = false;
-            document.getElementById('scheduleDateTime').value = '';
+            document.getElementById('rssEpisodeTitle').value = '';
+            document.getElementById('rssEpisodeDescription').value = '';
+            document.getElementById('rssEpisodeType').value = 'full';
+            document.getElementById('rssEpisodeNumber').value = '';
+            document.getElementById('rssSeasonNumber').value = '';
+            document.getElementById('rssEpisodeExplicit').checked = false;
+            document.getElementById('rssScheduleDateTime').value = '';
             document.getElementById('episodeProcessingStatus').style.display = 'none';
-            updateEpisodeDescriptionCounter();
+            updateRSSEpisodeDescriptionCounter();
 
             const submitBtn = document.getElementById('submitEpisodeBtn');
             submitBtn.disabled = false;
