@@ -306,9 +306,71 @@ After your recording session, export a detailed log:
 
 ---
 
-## Tab 4: Settings
+## Tab 4: RSS
 
-Customize the look and feel of Podcast Planner:
+This tab allows you to upload episodes directly to your RSS.com podcast account.
+
+**Note**: This tab only appears after you configure and enable the RSS.com integration in Settings.
+
+### Configuring RSS.com Integration
+
+Before using this tab, you need to set up your RSS.com credentials:
+
+1. Go to the **Settings** tab
+2. Scroll to the **RSS.com Integration** section
+3. Enter your **Podcast ID** (find this in your RSS.com dashboard)
+4. Enter your **API Key** (get this from [RSS.com Dashboard](https://dashboard.rss.com/api-access/))
+5. Check the **Enable RSS API** box
+6. The RSS tab will now appear in the navigation
+
+### Upload Audio
+
+Upload audio files for your episodes:
+
+1. **Drag and drop** an audio file into the drop zone, or click to select a file
+2. **Supported formats**: MP3, M4A, WAV, AAC, OGG, FLAC (max 500MB)
+3. Click **Upload Audio** to send the file to RSS.com
+4. Once uploaded, you'll see the **Upload ID** displayed
+5. Use **Clear** to remove the upload and start over
+
+### Create Episode
+
+Create a new episode on RSS.com:
+
+1. **Title** (required): Enter your episode title (max 250 characters)
+2. **Description** (required): Write your episode description (max 4000 characters)
+   - Character counter shows remaining space
+3. **Episode Type**: Choose Full, Trailer, or Bonus (default: Full)
+4. **Episode Number** (optional): Enter the episode number
+5. **Season Number** (optional): Enter the season number
+6. **Explicit Content**: Check if the episode contains explicit content
+7. **Schedule Date/Time** (optional): Set when the episode should publish
+   - Uses your local time, automatically converted to UTC
+8. **Audio**: If you uploaded audio above, it will be automatically attached
+   - You can also create an episode without audio and add it later
+
+Click **Create Episode** to submit. You'll see a processing status indicator that updates automatically.
+
+### Get Episodes
+
+View all episodes in your RSS.com podcast:
+
+1. Click **Refresh Data** to fetch the latest episodes
+2. Episodes display as cards showing:
+   - Episode title
+   - Episode and season numbers
+   - Status badge (Draft, Scheduled, or Published)
+   - Processing status (Pending, Processing, Ready, or Error)
+   - Publication date
+   - Cover image (if available)
+
+The list automatically refreshes after creating new episodes.
+
+---
+
+## Tab 5: Settings
+
+Customize the look and feel of Podcast Planner and configure integrations:
 
 ### Theme
 
@@ -323,7 +385,7 @@ Pick your favorite gradient color scheme:
 - Purple (default)
 - Blue
 - Green
-- Orange  
+- Orange
 - Red
 - Teal
 - Studio:Channel84 (custom green to magenta)
@@ -342,9 +404,23 @@ Pick your favorite gradient color scheme:
 
 Changes apply instantly - no need to save!
 
+### RSS.com Integration
+
+Connect your RSS.com account to upload and manage podcast episodes:
+
+1. **Podcast ID**: Enter your RSS.com Podcast ID
+   - Find this in your RSS.com dashboard
+2. **API Key**: Enter your RSS.com API Key (stored securely in your browser)
+   - Get your key from [RSS.com Dashboard](https://dashboard.rss.com/api-access/)
+3. **Enable RSS API**: Check this box to activate the integration
+   - This checkbox is only available after entering both Podcast ID and API Key
+   - Once enabled, the **RSS** tab appears in the main navigation
+
+**Privacy**: Your API credentials are stored locally in your browser and never sent anywhere except to RSS.com's API when you use the RSS features.
+
 ---
 
-## Tab 5: Further Help
+## Tab 6: Further Help
 
 This tab provides resources for getting the most out of Podcast Planner:
 
@@ -457,6 +533,18 @@ Get help planning your episode with AI:
 
 ## Version History
 
+### Version 1.91 (December 2025)
+- **RSS.com Integration**: Upload and manage podcast episodes directly from Podcast Planner
+  - Connect your RSS.com account with Podcast ID and API Key
+  - Upload audio files (MP3, M4A, WAV, AAC, OGG, FLAC up to 500MB)
+  - Create episodes with full metadata support
+  - View all episodes with status badges and processing indicators
+  - Auto-polling for episode processing status
+  - Optional audio upload - create episodes with or without audio
+  - Local time to UTC conversion for scheduled episodes
+- **Settings Page Updates**: Added RSS.com Integration section
+- **New RSS Tab**: Conditionally appears when RSS integration is enabled
+- **All previous features retained.**
 
 ### Version 1.9 (December 2025)
 - **Go Live Save & Next Fix**: "Save & Next" now saves notes and time, advances to the next segment, and never shows a reset or unsaved notes warning. Only the plain Next button warns about unsaved notes.

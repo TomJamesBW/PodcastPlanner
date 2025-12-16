@@ -34,6 +34,14 @@ A single-page web application for podcast hosts to plan and organize their episo
 - Import previously saved JSON plans
 - Clear all data option
 
+### RSS.com Integration
+- Upload audio files directly to RSS.com (MP3, M4A, WAV, AAC, OGG, FLAC up to 500MB)
+- Create and manage episodes with full metadata support
+- View all podcast episodes with status and processing indicators
+- Auto-polling for episode processing status
+- Optional audio upload - create episodes with or without audio
+- Secure local storage of API credentials
+
 ### AI Integration
 - Five pre-written prompts for podcast planning assistance
 - Quick access buttons for ChatGPT, GitHub Copilot, and Google Gemini
@@ -54,7 +62,8 @@ A single-page web application for podcast hosts to plan and organize their episo
 3. Add hosts, guests, or producers with their custom colors
 4. Create segments with descriptions, key points, and time estimates
 5. Switch to the **Planner** tab to review and organize your episode
-6. Export your completed plan using the export buttons
+6. (Optional) Configure RSS.com integration in **Settings** to upload episodes
+7. Export your completed plan using the export buttons
 
 ### Managing Episode Details
 - Enter episode title, number, and season in the Planner Details tab
@@ -108,8 +117,8 @@ A single-page web application for podcast hosts to plan and organize their episo
 - **Type**: Single-Page Application (SPA)
 - **Technologies**: HTML5, CSS3, Vanilla JavaScript
 - **Dependencies**: html2canvas (CDN for image export)
-- **File Size**: ~75KB single file
-- **Version**: 1.70
+- **File Size**: ~90KB single file
+- **Version**: 1.91
 
 ### Data Structure
 ```javascript
@@ -146,6 +155,22 @@ episodeDetails = {
   season: String,
   recordingDate: String,
   airDate: String
+}
+
+// RSS.com configuration
+rssConfig = {
+  podcastId: String,
+  apiKey: String,
+  enabled: Boolean,
+  baseUrl: String
+}
+
+// RSS.com state
+rssState = {
+  uploadedAudioId: String,
+  currentEpisodeId: String,
+  pollingInterval: Number,
+  episodes: Array<Object>
 }
 ```
 
@@ -224,6 +249,20 @@ episodeDetails = {
 
 ## Version History
 
+### Version 1.91 (December 2025)
+- **RSS.com Integration**: Full API integration for episode management
+  - Connect RSS.com account with Podcast ID and API Key
+  - Upload audio files (MP3, M4A, WAV, AAC, OGG, FLAC) up to 500MB
+  - Create episodes with metadata (title, description, episode/season numbers, explicit flag)
+  - Schedule episodes with local-to-UTC datetime conversion
+  - View all episodes with status badges (Draft, Scheduled, Published)
+  - Real-time processing status with auto-polling every 5 seconds
+  - Optional audio upload - episodes can be created without audio
+  - Secure local storage of API credentials
+- **New RSS Tab**: Conditionally displayed when RSS integration is enabled
+- **Settings Updates**: Added RSS.com Integration configuration section
+- **CSS Improvements**: Password and datetime-local inputs now match text input styling
+- **All previous features retained.**
 
 ### Version 1.9 (December 2025)
 - **Go Live Save & Next Fix**: Save & Next now saves notes and time, advances segment, and never shows a reset or unsaved notes warning. Only the plain Next button warns about unsaved notes.
